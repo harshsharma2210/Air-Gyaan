@@ -1,16 +1,18 @@
 
 import Vue from 'vue';
 import VueRouter from "vue-router";
-import HelloWorld from "@/components/HelloWorld";
-import post from "@/components/Main/post";
+import post from "@/components/post";
+import postComponent from "@/components/Main/postComponent";
+import profile from "@/components/User/profile";
 
 Vue.use(VueRouter);
 
 
 export default new VueRouter({
     routes: [
-        { path: "/",name:'Hello',component: HelloWorld },
-        { path: "/post", component: post }
+        { path: "/", name: 'Hello', component: post },
+        { path: "/post", component: postComponent },
+        { path: "/profile", component: profile }
 
     ],
     mode: "history",
