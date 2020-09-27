@@ -131,7 +131,7 @@
       </div>
     </editor-menu-bar>
 
-    <editor-content class="editor__content" :editor="editor" />
+    <editor-content class="editor__content" :editor="editor" ></editor-content>
   </div>
 </template>
 
