@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "tiptap": "^1.30.0",
+    "tiptap-extensions": "^1.33.0",
     "vue": "^2.6.11",
     "vue-router": "^3.4.3",
     "vuetify": "^2.2.11"

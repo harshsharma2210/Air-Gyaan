@@ -18,7 +18,7 @@ export default {
       {
         name: "content-1",
         text: "content",
-        catagory: "catagory",
+        category: "category",
         createdBy: {
           name: "name of creator",
           profile: "link for profile picture",
@@ -28,7 +28,7 @@ export default {
       {
         name: "content-2",
         text: "content",
-        catagory: "catagory",
+        category: "category",
         createdBy: {
           name: "name of creator",
           profile: "link for profile picture",
@@ -38,7 +38,7 @@ export default {
       {
         name: "content-3",
         text: "content",
-        catagory: "catagory",
+        category: "category",
         createdBy: {
           name: "name of creator",
           profile: "link for profile picture",
@@ -48,7 +48,7 @@ export default {
       {
         name: "content-4",
         text: "content",
-        catagory: "catagory",
+        category: "category",
         createdBy: {
           name: "name of creator",
           profile: "link for profile picture",
