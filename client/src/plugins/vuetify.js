@@ -1,3 +1,5 @@
+import '@fortawesome/fontawesome-free/css/all.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
@@ -16,6 +18,9 @@ export default new Vuetify({
           error: '#b71c1c',
         },
       },
+    },
+    icons: {
+      iconfont: 'md' || 'fa'
     },
   });
 

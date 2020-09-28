@@ -1,20 +1,10 @@
 <template>
   <v-row justify="center">
-    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="600px"
-    >
+    <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
+        <v-btn color="primary" dark v-bind="attrs" v-on="on">
           create Post
         </v-btn>
-
       </template>
       <v-card class="pa-md-7 mx-lg-auto" id="rounded-card">
         <template>
@@ -23,24 +13,20 @@
               New Post!
             </h2>
 
-            <tiptap-vuetify v-model="content" :extensions="extensions" placeholder="Write something …"/>
+            <tiptap-vuetify
+              v-model="content"
+              :extensions="extensions"
+              placeholder="Write something …"
+            />
           </div>
         </template>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
-          >
+          <v-btn color="blue darken-1" text @click="dialog = false">
             Close
           </v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
-          >
+          <v-btn color="blue darken-1" text @click="dialog = false">
             Post!
           </v-btn>
         </v-card-actions>
@@ -50,8 +36,8 @@
 </template>
 
 <style lang="css">
-#rounded-card{
-    border-radius: 30px;
+#rounded-card {
+  border-radius: 30px;
 }
 </style>
 
@@ -71,8 +57,8 @@ import {
   Blockquote,
   HardBreak,
   HorizontalRule,
-  History
-} from 'tiptap-vuetify'
+  History,
+} from "tiptap-vuetify";
 export default {
   components: { TiptapVuetify },
   data: () => ({
@@ -90,11 +76,11 @@ export default {
       Code,
       HorizontalRule,
       Paragraph,
-      HardBreak
+      HardBreak,
     ],
-    content: '',
+    content: "",
     dialog: false,
-    max: 250
-  })
-}
+    max: 250,
+  }),
+};
 </script>
