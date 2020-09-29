@@ -12,8 +12,8 @@
 
     <v-bottom-navigation color="primary" app>
       <v-btn to="/">
-        <span>Recents</span>
-        <v-icon>mdi-history</v-icon>
+        <span>Home</span>
+        <v-icon>mdi-home</v-icon>
       </v-btn>
 
       <v-btn to="/explore">
@@ -28,19 +28,30 @@
 
       <v-dialog v-model="dialog" persistent max-width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn v-bind="attrs" v-on="on" class="mx-2" fab color="white" rounded>
-            <span>Post</span>
-            <v-icon>mdi-plus-circle</v-icon>
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            class="mx-2 rounded-circle d-inline-block"
+            color="cyan accent-2"
+            elevation="6"
+            rounded
+            x-large
+            fab
+            top
+            center
+            absolute
+          >
+            <v-icon large>mdi-plus</v-icon>
           </v-btn>
         </template>
-
+        
         <v-card class="pa-md-7 mx-lg-auto" id="rounded-card">
+          <h2>
+          New Post!
+        </h2>
+
           <template>
             <div>
-              <h2 class="mb-3">
-                New Post!
-              </h2>
-
               <tiptap-vuetify
                 v-model="content"
                 :extensions="extensions"
@@ -67,10 +78,9 @@
       </v-btn>
 
       <v-btn to="/profile">
-        <span>User</span>
+        <span>Me</span>
         <v-icon>mdi-account</v-icon>
       </v-btn>
-
     </v-bottom-navigation>
   </v-app>
 </template>
@@ -115,7 +125,9 @@ export default {
     ],
     content: "",
     dialog: false,
-    max: 250,
+    maxLength: 250,
+    remainingChars: 250,
+    reachZero: 0,
     activeBtn: 0,
     showNav: true,
   }),
