@@ -1,17 +1,31 @@
 import Vue from "vue";
 import Router from "vue-router";
 import HomeView from "@/views/HomeView";
+import { routeMiddleware } from "@/i18n";
+
+const COUNTRY_AND_LANG = process.env.VUE_APP_COUNTRY_AND_LANG || "en-US";
 
 // this will only load top level routes
 const requireRoutes = require.context("./", false, /\.js$/);
 
-const routes = [
-    {
-        path: "/",
-        name: "home",
-        component: HomeView
+const LangView = {
+    render(h) {
+       return h("router-view")
     }
-];
+}
+
+const langRoute = {
+    path: "/:lang",
+    component: LangView,
+    beforeEnter: routeMiddleware,
+    children: [
+        {
+            path: "",
+            name: "home",
+            component: HomeView
+        }
+    ]
+}
 
 const verify = process.env.NODE_ENV !== "production";
 let entry;
@@ -48,7 +62,7 @@ if (verify) {
             } else {
                 routeMap.set(entry.name, entry.path);
             }
-            routes.push(entry);
+            langRoute.children.push(entry);
         }
     }
     routeMap.clear();
@@ -59,17 +73,30 @@ if (verify) {
         }
         entry = requireRoutes(file).default;
         if (Array.isArray(entry)) {
-            routes.push(...entry);
+            langRoute.children.push(...entry);
         } else {
-            routes.push(entry);
+            langRoute.children.push(entry);
         }
     }
 }
 
+const routes = [
+    langRoute, {
+        // Redirect user to supported lang version.
+        path: '*',
+        // eslint-disable-next-line no-unused-vars
+        redirect (to) {
+            return `/${COUNTRY_AND_LANG}/`;
+        }
+    }
+];
+
+
 Vue.use(Router);
 
 export default new Router({
-    mode: history,
+    mode: "history",
+    base: process.env.BASE_URL || "/",
     routes
 });
 

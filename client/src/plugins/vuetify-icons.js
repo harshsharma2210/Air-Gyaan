@@ -6,21 +6,25 @@ import {
   mdiPlus,
   mdiDelete,
   mdiChevronLeft,
+  mdiChevronDown,
   mdiPageFirst,
   mdiChevronRight,
   mdiPageLast,
   mdiExitToApp,
   mdiAlertCircle,
-  mdiAlert
+  mdiAlert,
+  mdiTranslate
 } from "@mdi/js";
 const icons = {
   iconfont: "mdiSvg",
   values: {
+    translate: mdiTranslate,
     help: mdiHelpCircleOutline,
     close: mdiClose,
     search: mdiMagnify,
     refresh: mdiRefresh,
     add: mdiPlus,
+    down: mdiChevronDown,
     delete: mdiDelete,
     arrowLeft: mdiChevronLeft,
     arrowRight: mdiChevronRight,

@@ -1,3 +1,4 @@
+import "@/styles/app.scss";
 const prod = process.env.NODE_ENV === "production";
 const configuration = prod ? "sass" : (process.env.SASS || "nosass");
 

@@ -12,11 +12,11 @@ const vuetifyOptions = {
     options: {
       customProperties: true
     },
-    dark: true,
+    dark: false,
     themes: {
       light: {
-        primary: "#078930",
-        accent: "#fa6400",
+        primary: "#fff",
+        accent: "#009688",
         secondary: "#424242",
         info: "#2196F3",
         warning: "#ffc107",

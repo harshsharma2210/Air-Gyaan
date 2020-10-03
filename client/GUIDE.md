@@ -68,6 +68,11 @@ If you don't need css vars, just remove or comment out from `@/plugins/vuetify-o
     },
 ```
 
+I have included `@/styles/app.scss` file to override `href` color, vuetify set it to `primary` color, so I change it to be
+`accent`.
+
+You can configure in this file what you want to override, also use `import` another `scss` files.
+
 # Icons
 
 Instead loading a css font, we will use @mdi/js, the same but via javascript, it can be tree shacked, only
@@ -95,6 +100,8 @@ I also configure vuetify to use this plugin to be used for translation instead i
 delegate all translations to the plugin.
 
 You can see [Vuetify Vue I18n](https://vuetifyjs.com/en/features/internationalization/#vue-i18n).
+
+I have included a small demo on home view, you can see what you can do.
 
 ## Configure I18n
 
@@ -151,4 +158,13 @@ Always use a directory for your pages/views, I use `views`: I have configured `H
 putting your views inside `components` folder, this is a problem, you need to go to router to see if it is a component or a view
 or both.
 
+There is an important thing about routes, if we have a huge amount of them, we are loading the views and its routes,
+so the module will grow faster.
 
+If we split the view and the route, we can load the view when the route requires it: using the webpack import magic function,
+we can now load the views in an async fashion.
+
+You can see on `@/router/post.js` file how can load the component using async.
+
+When app routes grows, then the number can be huge, but all views are not included on the build, just a reference with a 
+promise that will be resolved once the user goes to the route.

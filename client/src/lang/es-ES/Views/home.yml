@@ -1,0 +1,40 @@
+welcome: Welcome to Vuetify [Spanish]
+router-sample: Route sample [Spanish]
+go-post: Go to post page [Spanish]
+for-help: For help and collaboration with other Vuetify developers [Spanish],
+join-discord: please join our online [Spanish]
+discord-community: Discord Community [Spanish]
+discord-community-alt: Link to Discord Community. Will be opened in a new page. [Spanish]
+discord-url: "https://community.vuetifyjs.com"
+whats-next: What"s next? [Spanish]
+important-links: Important Links [Spanish]
+ecosystem: Ecosystem [Spanish]
+
+ecosystem-entries:
+  - text: vuetify-loader [Spanish]
+    href: "https://github.com/vuetifyjs/vuetify-loader"
+  - text: github [Spanish]
+    href: "https://github.com/vuetifyjs/vuetify"
+  - text: awesome-vuetify [Spanish]
+    href: "https://github.com/vuetifyjs/awesome-vuetify"
+
+important-links-entries:
+  - text: Documentation [Spanish]
+    href: "https://vuetifyjs.com"
+  - text: Chat [Spanish]
+    href: "https://community.vuetifyjs.com"
+  - text: Made with Vuetify [Spanish]
+    href: "https://madewithvuejs.com/vuetify"
+  - text: Twitter [Spanish]
+    href: "https://twitter.com/vuetifyjs"
+  - text: Articles [Spanish]
+    href: "https://medium.com/vuetify"
+
+whats-next-entries:
+  - text: Explore components [Spanish]
+    href: "https://vuetifyjs.com/components/api-explorer"
+  - text: Select a layout [Spanish]
+    href: "https://vuetifyjs.com/getting-started/pre-made-layouts"
+  - text: Frequently Asked Questions [Spanish]
+    href: "https://vuetifyjs.com/getting-started/frequently-asked-questions"
+

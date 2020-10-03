@@ -34,6 +34,8 @@ const setI18nLanguage = lang => {
   return lang;
 };
 
+export {  languages };
+
 export const changeLanguage = lang => {
   if (!loadedLanguages.includes(lang)) {
     return import(/* webpackChunkName: "lang-[request]" */ `@/lang/${lang}`)
@@ -88,3 +90,16 @@ export const initializeLanguage = () => {
     }
   });
 };
+
+export const routeMiddleware = (to, from, next) => {
+  // Load async message files here
+  const lang = to.params.lang
+  if (!lang || locales.indexOf(lang) === -1) {
+    return next(`/${COUNTRY_AND_LANG}`)
+  }
+  if (loadedLanguages.indexOf(lang) > -1) {
+    return next();
+  }
+  return changeLanguage(lang).then(() => next())
+}
+
