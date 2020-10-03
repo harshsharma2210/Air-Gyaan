@@ -43,7 +43,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "app-login",
+  name: "sign-in",
   data: () => ({
     username: null,
     password: null,

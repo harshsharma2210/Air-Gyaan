@@ -57,7 +57,7 @@
       v-model="showSignIn"
       max-width="460px"
     >
-      <app-login @signin="signIn" />
+      <sign-in @signin="signIn" />
     </v-dialog>
   </v-app>
 </template>
@@ -66,11 +66,11 @@
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
 
-const AppLogin = () => import(/* webpackChunkName: "login-dependencies" */ "@/components/AppLogin");
+const SignIn = () => import(/* webpackChunkName: "user-dependencies" */ "@/components/SignIn");
 
 export default {
   name: 'Airgyaan',
-  components: { AppLogin },
+  components: { SignIn },
   data: () => ({
     available: languages,
     showSignIn: false,
