@@ -23,7 +23,7 @@ const webpackConfiguration = {
        */
       config.plugins.push(
         new CompressionPlugin({
-          filename: "[path].gz[query]",
+          filename: "[path][base].gz[query]",
           algorithm: "gzip",
           test: /\.js$|\.svg$|\.css$|\.html|\.map|\.eot|\.ttf|\.ico|\.png|\.jpg$/,
           threshold: 128,

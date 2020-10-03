@@ -1,6 +1,7 @@
-@import '~vuetify/src/styles/main.sass';
+$color-pack: false;
 
 .v-application a {
   color: var(--v-accent-base) !important;
 }
 
+@import '~vuetify/src/styles/main.sass';

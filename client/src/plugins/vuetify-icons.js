@@ -10,14 +10,20 @@ import {
   mdiPageFirst,
   mdiChevronRight,
   mdiPageLast,
+  mdiLogin,
   mdiExitToApp,
   mdiAlertCircle,
   mdiAlert,
-  mdiTranslate
+  mdiTranslate,
+  mdiEye,
+  mdiEyeOff,
+  mdiAccountCircleOutline
 } from "@mdi/js";
 const icons = {
   iconfont: "mdiSvg",
   values: {
+    hidePassword: mdiEyeOff,
+    showPassword: mdiEye,
     translate: mdiTranslate,
     help: mdiHelpCircleOutline,
     close: mdiClose,
@@ -32,7 +38,9 @@ const icons = {
     nextPage: mdiChevronRight,
     firstPage: mdiPageFirst,
     lastPage: mdiPageLast,
-    exit: mdiExitToApp,
+    signin: mdiLogin,
+    signup: mdiAccountCircleOutline,
+    signout: mdiExitToApp,
     error: mdiAlertCircle,
     warning: mdiAlert
   }

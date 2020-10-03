@@ -15,6 +15,9 @@ const vuetifyOptions = {
     dark: false,
     themes: {
       light: {
+        // primary: '#328288',
+        // secondary: '#b0bec5',
+        // accent: '#8c9eff',
         primary: "#fff",
         accent: "#009688",
         secondary: "#424242",
