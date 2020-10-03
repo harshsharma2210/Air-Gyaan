@@ -1,7 +1,6 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+const prod = process.env.NODE_ENV === "production";
+const configuration = prod ? "sass" : (process.env.SASS || "nosass");
 
-Vue.use(Vuetify);
+const { i18n, vuetify } = require(`./vuetify-${configuration}.js`);
 
-export default new Vuetify({
-});
+export { i18n, vuetify };

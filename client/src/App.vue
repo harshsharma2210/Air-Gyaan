@@ -4,10 +4,9 @@
       app
       color="primary"
       dark
+      dense
     >
-      <div class="d-flex align-center">
-        <p>Air Gyaan</p>
-      </div>
+      <v-toolbar-title>{{ $t("App.title") }}</v-toolbar-title>
     </v-app-bar>
 
     <v-main>

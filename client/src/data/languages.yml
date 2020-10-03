@@ -1,0 +1,6 @@
+- name: English
+  locale: en-US
+  country: US
+- name: Español
+  locale: es-ES
+  country: ES
