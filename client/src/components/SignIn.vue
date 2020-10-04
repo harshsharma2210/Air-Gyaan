@@ -120,7 +120,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.v-card__text.signin-form {
+.v-form.signin-form {
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: min-content;
