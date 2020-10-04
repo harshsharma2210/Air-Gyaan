@@ -73,6 +73,28 @@ I have included `@/styles/app.scss` file to override `href` color, vuetify set i
 
 You can configure in this file what you want to override, also use `import` another `scss` files.
 
+## Fonts
+
+I have include `Roboto` and `Montserrat` fonts in the applications to avois `CORS` problems. The app will include all its
+own resources.
+
+You can use [google-webfonts-helper](http://google-webfonts-helper.herokuapp.com/fonts/montserrat?subsets=latin) to change 
+to another font.
+
+You need to create a `css` inside `@/css/` directory to configure the files.
+
+Then download your font kit from [google-webfonts-helper](http://google-webfonts-helper.herokuapp.com/fonts/montserrat?subsets=latin),
+adjust the `css`, and modify `@/styles/variables.scss` to include your font to vuetify use it:
+
+```
+$body-font-family: "Montserrat", sans-serif;
+```
+
+Remember, `vuetify` uses `Roboto` by default, so if your revert to `Roboto` font just comment previous entry from `@/styles/variables.scss`.
+
+I only use `woff` and `woff2` variants, about 100% browsers support them, and you are not supporting older browsers like `ie11`,
+so there is no need to include `ttf`, `eot`  and `svg` variants. 
+
 # Icons
 
 Instead loading a css font, we will use @mdi/js, the same but via javascript, it can be tree shacked, only
