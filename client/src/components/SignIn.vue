@@ -2,32 +2,30 @@
   <v-card>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <v-form @submit.prevent="fireSubmit" class="signin-form">
-        <v-text-field
-            ref="username"
-            v-model="username"
-            :label="$t('Components.User.signin.username')"
-            :rules="[rules.required]"
-            counter
-            dense
-            required
-        ></v-text-field>
-        <v-text-field
-            ref="password"
-            :type="!!password && showPassword ? 'text' : 'password'"
-            v-model="password"
-            :append-icon="!!password ? null : (showPassword ? '$vuetify.icons.hidePassword' : '$vuetify.icons.showPassword')"
-            :label="$t('Components.User.signin.password')"
-            :rules="[rules.required]"
-            counter
-            dense
-            required
-        ></v-text-field>
-      </v-form>
+      <v-text-field
+          ref="username"
+          v-model="username"
+          :label="$t('Components.User.signin.username')"
+          :rules="[rules.required]"
+          counter
+          dense
+          required
+      ></v-text-field>
+      <v-text-field
+          ref="password"
+          :type="!!password && showPassword ? 'text' : 'password'"
+          v-model="password"
+          :append-icon="!!password ? null : (showPassword ? '$vuetify.icons.hidePassword' : '$vuetify.icons.showPassword')"
+          :label="$t('Components.User.signin.password')"
+          :rules="[rules.required]"
+          counter
+          dense
+          required
+      ></v-text-field>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn
+      <app-btn
           ref="access"
           outlined
           class="ma-2 px-4"
@@ -35,15 +33,18 @@
           @click.native.prevent="fireSubmit"
       >
         {{ $t("Components.User.signin.signin") }}
-      </v-btn>
+      </app-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
 import { mapState } from "vuex";
 
+import AppBtn from "@/components/AppBtn";
+
 export default {
   name: "sign-in",
+  components: { AppBtn },
   data: () => ({
     username: null,
     password: null,

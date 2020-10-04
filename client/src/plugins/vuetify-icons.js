@@ -17,7 +17,9 @@ import {
   mdiTranslate,
   mdiEye,
   mdiEyeOff,
-  mdiAccountCircleOutline
+  mdiAccountCircleOutline,
+  mdiBrightness6,
+  mdiBrightness4
 } from "@mdi/js";
 const icons = {
   iconfont: "mdiSvg",
@@ -42,7 +44,9 @@ const icons = {
     signup: mdiAccountCircleOutline,
     signout: mdiExitToApp,
     error: mdiAlertCircle,
-    warning: mdiAlert
+    warning: mdiAlert,
+    lightMode: mdiBrightness6,
+    darkMode: mdiBrightness4
   }
 };
 

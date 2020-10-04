@@ -14,12 +14,18 @@ const vuetifyOptions = {
     },
     dark: false,
     themes: {
+      dark: {
+        primary: "#000",
+        accent: "#6B38FB",
+        secondary: "#fff",
+        info: "#2196F3",
+        warning: "#ffc107",
+        error: "#b71c1c",
+        success: "#4caf50"
+      },
       light: {
-        // primary: '#328288',
-        // secondary: '#b0bec5',
-        // accent: '#8c9eff',
         primary: "#fff",
-        accent: "#009688",
+        accent: "#6B38FB",
         secondary: "#424242",
         info: "#2196F3",
         warning: "#ffc107",
