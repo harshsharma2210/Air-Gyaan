@@ -1,11 +1,11 @@
 <template>
   <v-bottom-navigation app v-model="value">
-    <v-btn value="home">
+    <v-btn value="home" :x-small="smallButtons">
       <span>{{ $t("App.home") }}</span>
       <v-icon>$vuetify.icons.home</v-icon>
     </v-btn>
 
-    <v-btn value="explore-web">
+    <v-btn value="explore-web" :x-small="smallButtons">
       <span>{{ $t("App.explore") }}</span>
       <v-icon>$vuetify.icons.searchWeb</v-icon>
     </v-btn>
@@ -25,14 +25,14 @@
     </v-fade-transition>
 
     <v-fade-transition mode="out-in">
-      <v-btn v-show="loggedIn" value="notifications">
+      <v-btn v-show="loggedIn" value="notifications" :x-small="smallButtons">
         <span>{{ $t("App.notifications") }}</span>
         <v-icon>$vuetify.icons.notifications</v-icon>
       </v-btn>
     </v-fade-transition>
 
     <v-fade-transition mode="out-in">
-      <v-btn v-show="loggedIn" value="me">
+      <v-btn v-show="loggedIn" value="me" :x-small="smallButtons">
         <span>{{ $t("App.me") }}</span>
         <v-icon>$vuetify.icons.account</v-icon>
       </v-btn>
@@ -42,15 +42,19 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import detectPassiveEvents from "@/utils/detectPassiveEvents";
 
 export default {
   name: "app-navigation",
   data: () => ({
     addFloating: false,
-    value: "home"
+    value: undefined
   }),
   computed: {
-    ...mapState(["loggedIn"])
+    ...mapState(["loggedIn"]),
+    smallButtons() {
+      return this.$vuetify.breakpoint.xs;
+    }
   },
   watch: {
     value: {
@@ -63,8 +67,13 @@ export default {
     }
   },
   async beforeMount() {
+    this.value = this.$route.name;
     this.addFloating = window.scrollY === 0;
-    window.addEventListener("scroll", this.onScroll);
+    if (detectPassiveEvents.hasSupport) {
+      window.addEventListener("scroll", this.onScroll,{ passive: true, capture: false });
+    } else {
+      window.addEventListener("scroll", this.onScroll, false);
+    }
   },
   async beforeDestroy() {
     window.removeEventListener("scroll", this.onScroll);
@@ -100,6 +109,10 @@ export default {
       min-width: initial !important;
       transform: translate(0, -28px);
     }
+  }
+  .v-btn.v-size--x-small {
+    padding: 0;
+    min-width: 64px;
   }
 }
 </style>
