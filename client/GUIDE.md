@@ -7,7 +7,7 @@ you can see [Environment variables](https://cli.vuejs.org/guide/mode-and-env.htm
 
 `vue` can expose environment variables that can be also used on the app, just prefix it with `VUE_`:
 
-The variables will automatically be accessible under process.env.variableName in your project. 
+The variables will automatically be accessible under `process.env.variableName` in your project. 
 Loaded variables are also available to all vue-cli-service commands, plugins and dependencies.
 
 You have a few options, this is from the Environment Variables and Modes documentation:
@@ -75,7 +75,7 @@ You can configure in this file what you want to override, also use `import` anot
 
 ## Fonts
 
-I have include `Roboto` and `Montserrat` fonts in the applications to avois `CORS` problems. The app will include all its
+I have include `Roboto` and `Montserrat` fonts in the applications to avoid `CORS` problems. The app will include all its
 own resources.
 
 You can use [google-webfonts-helper](http://google-webfonts-helper.herokuapp.com/fonts/montserrat?subsets=latin) to change 
@@ -90,13 +90,18 @@ adjust the `css`, and modify `@/styles/variables.scss` to include your font to v
 $body-font-family: "Montserrat", sans-serif;
 ```
 
-
 Remember, `vuetify` uses `Roboto` by default, so if your revert to `Roboto` font just comment previous entry from `@/styles/variables.scss`.
 
 I only use `woff` and `woff2` variants, about 100% browsers support them, and you are not supporting older browsers like `ie11`,
 so there is no need to include `ttf`, `eot`  and `svg` variants. 
 
 Just drop the font files inside `@/fonts/` directory, do not drop `ttf`, `eot`and `svg` files.
+
+Finally, go to `@/main.js` and import the new `css` font file:
+
+```
+import "@/css/font-montserrat.css";
+```
 
 # Icons
 
