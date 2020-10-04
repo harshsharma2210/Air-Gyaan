@@ -54,11 +54,23 @@
       <v-main>
         <router-view></router-view>
       </v-main>
+      <app-navigation @show-add-post="showAddPost = true"></app-navigation>
       <v-dialog
           v-model="showSignIn"
           max-width="460px"
       >
         <sign-in v-if="showSignIn" @signin="signIn" />
+      </v-dialog>
+      <v-dialog
+          v-model="showAddPost"
+          max-width="460px"
+          persistent
+      >
+        <app-post
+            v-if="showAddPost"
+            @cancel-post="showAddPost = false"
+            @add-post="addPost"
+        />
       </v-dialog>
   </v-app>
 </template>
@@ -68,14 +80,17 @@ import { mapActions, mapState } from "vuex";
 import { useDarkMode } from "@/utils/useDarkMode";
 
 import SignIn from "@/components/SignIn";
+import AppPost from "@/components/AppPost";
+import AppNavigation from "@/components/AppNavigation";
 
 export default {
   name: "default-layout",
-  components: { SignIn },
+  components: { AppNavigation, SignIn, AppPost },
   data: () => ({
     darkDetector: null,
     available: languages,
     showSignIn: false,
+    showAddPost: false,
     showSignUp: false
   }),
   computed: {
@@ -114,7 +129,7 @@ export default {
       await this.configureBusy(true);
       try {
         console.info(`Using ${username}/***** credentials`);
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await this.processLogin({ authenticated: true, userId: 1, userName: "Joaquín Sánchez Jiménez"});
         await this.configureBusy(false);
         await this.$nextTick();
@@ -131,6 +146,19 @@ export default {
       } finally {
         //todo: handle error
         await this.processLogin({ autheticated: false });
+        await this.configureBusy(false);
+      }
+    },
+    async addPost(post) {
+      await this.configureBusy(true);
+      try {
+        console.info(`Adding post ${JSON.stringify(post)}`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await this.configureBusy(false);
+        await this.$nextTick();
+        this.showAddPost = false;
+      } catch (e) {
+        //todo: handle error
         await this.configureBusy(false);
       }
     }

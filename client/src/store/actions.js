@@ -4,5 +4,8 @@ export default {
   },
   processLogin({ commit }, payload) {
     commit("setContextInfo", payload);
+  },
+  updateNotifications({ commit }, payload) {
+    commit("setNotifications", payload)
   }
 };

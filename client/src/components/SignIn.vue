@@ -10,6 +10,7 @@
             :rules="usernameRules"
             counter
             dense
+            @keyup.enter.prevent="fireSubmit"
         ></v-text-field>
         <!-- passwords MUST have an id -->
         <v-text-field
@@ -24,6 +25,7 @@
             dense
             autocomplete="off"
             @click:append="showPassword = !showPassword"
+            @keyup.enter.prevent="fireSubmit"
         ></v-text-field>
       </v-form>
     </v-card-text>

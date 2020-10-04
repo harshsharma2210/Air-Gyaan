@@ -19,7 +19,11 @@ import {
   mdiEyeOff,
   mdiAccountCircleOutline,
   mdiBrightness6,
-  mdiBrightness4
+  mdiBrightness4,
+  mdiHome,
+  mdiSearchWeb,
+  mdiBellRing,
+  mdiAccount
 } from "@mdi/js";
 const icons = {
   iconfont: "mdiSvg",
@@ -46,7 +50,11 @@ const icons = {
     error: mdiAlertCircle,
     warning: mdiAlert,
     lightMode: mdiBrightness4,
-    darkMode: mdiBrightness6
+    darkMode: mdiBrightness6,
+    home: mdiHome,
+    searchWeb: mdiSearchWeb,
+    notifications: mdiBellRing,
+    account: mdiAccount
   }
 };
 

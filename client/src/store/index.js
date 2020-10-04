@@ -12,7 +12,8 @@ export default new Vuex.Store({
     loggedIn: null,
     userId: null,
     userName: null,
-    busy: false
+    busy: false,
+    notifications: 0
   },
   getters: {
     loggedIn: state => {
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     },
     busy: state => {
       return state.busy;
+    },
+    notifications: state => {
+      return state.notifications;
     }
   },
   mutations: {
@@ -42,6 +46,9 @@ export default new Vuex.Store({
     },
     setBusy(state, busy) {
       state.busy = busy;
+    },
+    setNotifications(state, notifications) {
+      state.notifications = notifications || 0;
     }
   },
   actions
