@@ -2,30 +2,34 @@
   <v-card>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <v-text-field
-          ref="username"
-          v-model="username"
-          :label="$t('Components.User.signin.username')"
-          :rules="[rules.required]"
-          counter
-          dense
-          required
-      ></v-text-field>
-      <v-text-field
-          ref="password"
-          :type="!!password && showPassword ? 'text' : 'password'"
-          v-model="password"
-          :append-icon="!!password ? null : (showPassword ? '$vuetify.icons.hidePassword' : '$vuetify.icons.showPassword')"
-          :label="$t('Components.User.signin.password')"
-          :rules="[rules.required]"
-          counter
-          dense
-          required
-      ></v-text-field>
+      <v-form class="signin-form pt-4" @submit.prevent="fireSubmit">
+        <v-text-field
+            ref="username"
+            v-model="form.username"
+            :label="$t('Components.User.signin.username')"
+            :rules="usernameRules"
+            counter
+            dense
+        ></v-text-field>
+        <!-- passwords MUST have an id -->
+        <v-text-field
+            id="password"
+            ref="password"
+            :type="passwordType"
+            v-model="form.password"
+            :append-icon="passwordIcon"
+            :label="$t('Components.User.signin.password')"
+            :rules="passwordRules"
+            counter
+            dense
+            autocomplete="off"
+            @click:append="showPassword = !showPassword"
+        ></v-text-field>
+      </v-form>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <app-btn
+      <v-btn
           ref="access"
           outlined
           class="ma-2 px-4"
@@ -33,21 +37,20 @@
           @click.native.prevent="fireSubmit"
       >
         {{ $t("Components.User.signin.signin") }}
-      </app-btn>
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
 import { mapState } from "vuex";
 
-import AppBtn from "@/components/AppBtn";
-
 export default {
   name: "sign-in",
-  components: { AppBtn },
   data: () => ({
-    username: null,
-    password: null,
+    form: {
+      username: null,
+      password: null
+    },
     showPassword: false
   }),
   computed: {
@@ -55,22 +58,44 @@ export default {
     title() {
       return this.$t("Components.User.signin.title", [this.$t("App.title")]);
     },
-    rules() {
-      const message = this.$t("Components.Validations.required");
+    usernameRules() {
+      return this.fieldValidator();
+    },
+    passwordRules() {
+      return this.fieldValidator();
+    },
+    passwordTyped() {
+      return this.password && this.password.trim().length > 0;
+    },
+    passwordType() {
+      return this.passwordTyped && this.showPassword ? "text" : "password";
+    },
+    passwordIcon() {
+      if (this.passwordTyped) {
+        return `$vuetify.icons.${this.showPassword ? 'hide' : 'show'}Password`;
+      }
+      return null;
+    },
+    formValues() {
       return {
-        required: value => !!value || message
-      };
+        username: this.form.username && this.form.username.trim(),
+        password: this.form.username && this.form.password.trim()
+      }
     }
   },
   mounted() {
     this.focusElement(true);
   },
+  async beforeDestroy() {
+    await this.resetForm();
+  },
   methods: {
+    async resetForm() {
+      this.form.username = null;
+      this.form.password = null;
+    },
     async fireSubmit() {
-      this.$emit("signin",{
-        username: this.username,
-        password: this.password
-      });
+      this.$emit("signin", this.formValues);
     },
     async focusElement(initial = false, el = "username") {
       if (initial) {
@@ -79,17 +104,29 @@ export default {
         await this.$nextTick();
       }
       this.$refs[el].focus();
+    },
+    fieldValidator() {
+      const vm = this;
+      return [value => vm.requiredField(value)];
+    },
+    requiredField(value) {
+      if (value && value.trim().length > 0) {
+        return true;
+      } else {
+        return this.$t("Components.Validations.required");
+      }
     }
   }
 }
 </script>
 <style lang="scss">
-.v-form.signin-form {
+.v-card__text.signin-form {
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: min-content;
   grid-row-gap: 8px;
-  border-top: 1px solid #e3e3e3;
-  border-bottom: 1px solid #e3e3e3;
+  //padding-top: 24px !important;
+  //border-top: 1px solid #e3e3e3;
+  //border-bottom: 1px solid #e3e3e3;
 }
 </style>

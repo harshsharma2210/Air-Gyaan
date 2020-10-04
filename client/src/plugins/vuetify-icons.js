@@ -45,8 +45,8 @@ const icons = {
     signout: mdiExitToApp,
     error: mdiAlertCircle,
     warning: mdiAlert,
-    lightMode: mdiBrightness6,
-    darkMode: mdiBrightness4
+    lightMode: mdiBrightness4,
+    darkMode: mdiBrightness6
   }
 };
 

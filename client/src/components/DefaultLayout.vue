@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :dark="$vuetify.theme.dark">
       <v-app-bar
           app
           color="primary"
@@ -58,7 +58,7 @@
           v-model="showSignIn"
           max-width="460px"
       >
-        <sign-in @signin="signIn" />
+        <sign-in v-if="showSignIn" @signin="signIn" />
       </v-dialog>
   </v-app>
 </template>

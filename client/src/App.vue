@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-theme-provider root>
+  <v-app :dark="$vuetify.theme.dark">
+    <v-theme-provider>
       <default-layout />
     </v-theme-provider>
   </v-app>
