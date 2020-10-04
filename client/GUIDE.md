@@ -90,10 +90,13 @@ adjust the `css`, and modify `@/styles/variables.scss` to include your font to v
 $body-font-family: "Montserrat", sans-serif;
 ```
 
+
 Remember, `vuetify` uses `Roboto` by default, so if your revert to `Roboto` font just comment previous entry from `@/styles/variables.scss`.
 
 I only use `woff` and `woff2` variants, about 100% browsers support them, and you are not supporting older browsers like `ie11`,
 so there is no need to include `ttf`, `eot`  and `svg` variants. 
+
+Just drop the font files inside `@/fonts/` directory, do not drop `ttf`, `eot`and `svg` files.
 
 # Icons
 
