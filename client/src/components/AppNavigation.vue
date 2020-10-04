@@ -1,11 +1,11 @@
 <template>
-  <v-bottom-navigation app>
-    <v-btn @click="navigateTo('home')">
+  <v-bottom-navigation app v-model="value">
+    <v-btn value="home">
       <span>{{ $t("App.home") }}</span>
       <v-icon>$vuetify.icons.home</v-icon>
     </v-btn>
 
-    <v-btn @click="navigateTo('explore-web')">
+    <v-btn value="explore-web">
       <span>{{ $t("App.explore") }}</span>
       <v-icon>$vuetify.icons.searchWeb</v-icon>
     </v-btn>
@@ -25,14 +25,14 @@
     </v-fade-transition>
 
     <v-fade-transition mode="out-in">
-      <v-btn v-show="loggedIn" @click="navigateTo('notifications')">
+      <v-btn v-show="loggedIn" value="notifications">
         <span>{{ $t("App.notifications") }}</span>
         <v-icon>$vuetify.icons.notifications</v-icon>
       </v-btn>
     </v-fade-transition>
 
     <v-fade-transition mode="out-in">
-      <v-btn v-show="loggedIn" @click="navigateTo('me')">
+      <v-btn v-show="loggedIn" value="me">
         <span>{{ $t("App.me") }}</span>
         <v-icon>$vuetify.icons.account</v-icon>
       </v-btn>
@@ -47,10 +47,20 @@ export default {
   name: "app-navigation",
   data: () => ({
     addFloating: false,
-    loop: null
+    value: "home"
   }),
   computed: {
     ...mapState(["loggedIn"])
+  },
+  watch: {
+    value: {
+      async handler(newVal, oldVal) {
+        if (newVal && oldVal !== undefined) {
+          await this.navigateTo(newVal);
+        }
+      },
+      immediate: true
+    }
   },
   async beforeMount() {
     this.addFloating = window.scrollY === 0;
