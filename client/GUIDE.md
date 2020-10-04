@@ -139,7 +139,7 @@ There are 3 folders where i18n stuff goes: `data`, `i18n` and `lang`.
 
 ## Data folder
 
-Here, we only have the file with all locales available `languages.yml, just add a new one copy/paste and adjust.
+Here, we only have the file with all locales available `languages.yml`, just add a new one copy/paste and adjust.
 
 I configure spanish as an example, just remove it when you want.
 
