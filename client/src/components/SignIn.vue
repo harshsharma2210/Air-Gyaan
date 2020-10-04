@@ -65,7 +65,7 @@ export default {
       return this.fieldValidator();
     },
     passwordTyped() {
-      return this.password && this.password.trim().length > 0;
+      return this.form.password && this.form.password.trim().length > 0;
     },
     passwordType() {
       return this.passwordTyped && this.showPassword ? "text" : "password";
