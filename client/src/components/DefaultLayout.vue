@@ -70,7 +70,7 @@
             </template>
             <v-list dense subheader>
               <v-subheader>{{ userName }}</v-subheader>
-              <v-list-item @click="switchDarkLightMode">
+              <v-list-item @click.prevent="switchDarkLightMode">
                 <v-list-item-icon>
                   <v-icon>{{ darkLightIcon }}</v-icon>
                 </v-list-item-icon>
@@ -78,7 +78,7 @@
                   <v-list-item-title v-text="darkLightText"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item @click="signOut">
+              <v-list-item @click.prevent="signOut">
                 <v-list-item-icon>
                   <v-icon>$vuetify.icons.signout</v-icon>
                 </v-list-item-icon>
@@ -123,7 +123,6 @@
 <script>
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
-import { useDarkMode } from "@/utils/useDarkMode";
 
 import SignIn from "@/components/SignIn";
 import AppPost from "@/components/AppPost";
@@ -133,7 +132,6 @@ export default {
   name: "default-layout",
   components: { AppNavigation, SignIn, AppPost },
   data: () => ({
-    darkDetector: null,
     available: languages,
     showSignIn: false,
     showAddPost: false,
@@ -156,13 +154,6 @@ export default {
     smallButtons() {
       return this.$vuetify.breakpoint.xs;
     }
-  },
-  async beforeMount() {
-    this.darkDetector = useDarkMode(this.$vuetify);
-  },
-  async beforeDestroy() {
-    this.darkDetector && this.darkDetector.destroy();
-    this.darkDetector = null;
   },
   methods: {
     ...mapActions(["configureBusy", "processLogin"]),

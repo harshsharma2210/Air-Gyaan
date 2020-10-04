@@ -12,7 +12,7 @@ const vuetifyOptions = {
     options: {
       customProperties: true
     },
-    dark: true,
+    dark: false,
     themes: {
       dark: {
         primary: "#000",
