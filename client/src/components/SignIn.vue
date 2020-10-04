@@ -125,8 +125,5 @@ export default {
   grid-template-columns: 1fr;
   grid-auto-rows: min-content;
   grid-row-gap: 8px;
-  //padding-top: 24px !important;
-  //border-top: 1px solid #e3e3e3;
-  //border-bottom: 1px solid #e3e3e3;
 }
 </style>

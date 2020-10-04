@@ -1,4 +1,5 @@
-import "@/css/font-roboto.css";
+// import "@/css/font-roboto.css";
+import "@/css/font-montserrat.css";
 import Vue from 'vue'
 import App from '@/App.vue'
 import { vuetify, i18n } from "@/plugins/vuetify";
