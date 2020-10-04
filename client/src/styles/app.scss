@@ -1,7 +1,20 @@
 $color-pack: false;
 
-.v-application a {
-  color: var(--v-accent-base) !important;
+.v-application {
+  a {
+    color: var(--v-accent-base) !important;
+  }
+  &.theme--dark {
+    .primary--text {
+      color: white !important;
+      caret-color: white !important;
+    }
+  }
+}
+
+.theme--dark.v-input {
+  color: #FFFFFF !important;
+  caret-color: white !important
 }
 
 @import '~vuetify/src/styles/main.sass';
