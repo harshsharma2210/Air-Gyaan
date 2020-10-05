@@ -7,7 +7,7 @@
       >
         <v-toolbar-title>{{ $t("App.title") }}</v-toolbar-title>
         <v-spacer />
-        <div key="welcome" v-show="loggedIn && !smallButtons">{{ welcome }}</div>
+        <div key="welcome" v-show="loggedIn && !smallButtons" class="separate-user">{{ welcome }}</div>
         <v-menu
             key="languages"
             bottom
@@ -17,7 +17,7 @@
             max-height="500"
             offset-y
             open-delay="60"
-            open-on-hover
+            :open-on-hover="!smallButtons"
             transition="slide-y-transition"
         >
           <template #activator="{ on }">
@@ -45,7 +45,7 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <div ref="small" v-if="loggedIn && smallButtons">
+        <div key="small" v-if="loggedIn && smallButtons" class="separate-bar">
           <v-menu
               key="options"
               bottom
@@ -55,7 +55,7 @@
               max-height="500"
               offset-y
               open-delay="60"
-              open-on-hover
+              :open-on-hover="!smallButtons"
               transition="slide-y-transition"
           >
             <template #activator="{ on }">
@@ -71,17 +71,17 @@
             <v-list dense subheader>
               <v-subheader>{{ userName }}</v-subheader>
               <v-list-item @click.prevent="switchDarkLightMode">
-                <v-list-item-icon>
+                <v-list-item-action>
                   <v-icon>{{ darkLightIcon }}</v-icon>
-                </v-list-item-icon>
+                </v-list-item-action>
                 <v-list-item-content>
                   <v-list-item-title v-text="darkLightText"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item @click.prevent="signOut">
-                <v-list-item-icon>
+                <v-list-item-action>
                   <v-icon>$vuetify.icons.signout</v-icon>
-                </v-list-item-icon>
+                </v-list-item-action>
                 <v-list-item-content>
                   <v-list-item-title v-text="$t('Components.User.signout')"></v-list-item-title>
                 </v-list-item-content>
@@ -89,7 +89,7 @@
             </v-list>
           </v-menu>
         </div>
-        <div key="normal" v-else>
+        <div key="normal" v-else class="separate-bar">
           <v-btn icon :title="darkLightText" @click="switchDarkLightMode"><v-icon>{{ darkLightIcon }}</v-icon></v-btn>
           <v-btn v-show="loggedIn"  key="signout" icon :title="$t('Components.User.signout')" @click="signOut"><v-icon>$vuetify.icons.signout</v-icon></v-btn>
           <v-btn v-show="!loggedIn" key="signin" icon :title="$t('Components.User.signin.signin')" @click="showSignIn = true"><v-icon>$vuetify.icons.signin</v-icon></v-btn>
@@ -205,3 +205,11 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.separate-bar {
+  padding-left: 8px;
+}
+.separate-user {
+  padding-right: 16px;
+}
+</style>
