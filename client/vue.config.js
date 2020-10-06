@@ -8,7 +8,7 @@ const prod = process.env.NODE_ENV === "production";
  and can take more than 20 seconds, you must create an .env.<mode>.local file
  and inside it just add SASS=sass: see Webpack entry on GUIDE.md.
  */
-const enableSass =  prod || (process.env.SASS === "sass");
+const enableSass =  prod || (process.env.VUE_APP_SASS === "sass");
 
 const webpackConfiguration = {
   transpileDependencies: [
