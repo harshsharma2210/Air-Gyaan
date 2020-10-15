@@ -185,7 +185,7 @@ load when page content is huge.
 The router I configure, just traverse all `js` files inside router directory and configures vue router with the information it read.
 
 Always use a directory for your pages/views, I use `views`: I have configured `HelloWorld` view as an example. You are
-putting your views inside `components` folder, this is a problem, you need to go to router to see if it is a component or a view
+putting your views inside `components` folder, and this is a problem, you need to go to router to see if it is a component or a view
 or both.
 
 There is an important thing about routes, if we have a huge amount of them, we are loading the views and its routes,
@@ -198,3 +198,38 @@ You can see on `@/router/post.js` file how can load the component using async.
 
 When app routes grows, then the number can be huge, but all views are not included on the build, just a reference with a 
 promise that will be resolved once the user goes to the route.
+
+## Integrate with server + mongo db
+
+You need to start first `server module` running `npm start` script: you need to install and configure `mongo db`.
+
+Once server module is running, just run one of the `mongo` variant client script: **before running the client module, you will need to create the 
+`.env.<variant>.local` file. Remember that these `.local` files are not part of the `git`, all of them are excluded**.
+
+I only  include one variant, the default one `env.dev-ui-mongo` that proxies all request to server rest api
+to the default server module port on `localhost:4000`.
+
+I suggest you create default development profiles/modes, so all developers just run the same scripts, and will only need to add
+its own `.local` variant when necessary, or you can use one generic to force all developers to use the same configuration.
+
+If some developer needs to start on another port client an server servers, then that developer can just add a `.local`
+file to its local filesystem and provide custom ports.
+
+For example, if you want to run `dev-ui-mongo` profile/mode with client server listening on port 13013 and server rest api
+server listening on port 8081, just add a `.env.dev-ui-mongo.local` with this content and run client and server:
+
+```
+API_PROXY=http://localhost:8081
+PORT=13013
+```
+
+Remember to change things on server rest api to allow start server on port 8081: for example, on windows `npm start --port 8081`
+and change `server.js` to use for example `yargs` or something similar or some environment variable to configure it.
+
+While using static port 4000, then this por cannot be changed.
+
+You can see `vue-config.js` to see how to start server on a distinct port: see `server` function.
+
+In these files (mongo variants) you will need to include the server port where server is running to proxy all requests.
+
+I only have included `/post` request to be proxied to the server rest api.

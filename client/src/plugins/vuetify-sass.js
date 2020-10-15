@@ -1,5 +1,8 @@
+import "@/styles/app.scss";
+
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
+
 import { i18n, vuetifyOptions } from "./vuetify-options";
 
 Vue.use(Vuetify);

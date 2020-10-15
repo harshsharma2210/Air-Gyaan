@@ -2,6 +2,37 @@ const CompressionPlugin = require("compression-webpack-plugin");
 
 const prod = process.env.NODE_ENV === "production";
 
+const fs = require("fs");
+
+const server = (process) => {
+  const devServer = {};
+  if (process.env.HTTPS) {
+    devServer.host = process.env.HOST || "0.0.0.0";
+    devServer.port = process.env.PORT || 8443;
+    devServer.https = {
+      key: fs.readFileSync(process.env.HTTPS_KEY),
+      cert: fs.readFileSync(process.env.HTTPS_CERT),
+      ca: fs.readFileSync(process.env.HTTPS_CA)
+    };
+  } else {
+    devServer.host = process.env.HOST || "0.0.0.0";
+    devServer.port = process.env.PORT || 8080;
+    devServer.https = false;
+  }
+  devServer.disableHostCheck = true;
+  if (process.env.API_PROXY !== undefined) {
+    devServer.proxy = {
+      "/posts": {
+        target: process.env.API_PROXY,
+        secured: process.env.API_PROXY_SECURED
+      }
+    };
+  }
+  return {
+    devServer: devServer
+  };
+};
+
 /*
  To develop you dont need SASS to be changed, only the ui designer must enable it.
  To enable SASS, remember, a change on variable.scss will recompile all styles
@@ -61,7 +92,8 @@ const webpackConfiguration = {
           );
       });
     }
-  }
+  },
+  ...server(process)
 };
 
 if (enableSass) {
