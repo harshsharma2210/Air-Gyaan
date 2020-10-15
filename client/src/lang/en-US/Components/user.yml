@@ -1,0 +1,16 @@
+welcome: Welcome, {0}
+signout: Sign out
+signin:
+  title: Sign In to {0}
+  username: Username or email address
+  password: Password
+  signin: Sign In
+signup:
+  title: Create your account
+  subtitle: Join {0}
+  username: Username or email address
+  password: Password
+  repeat-password: Confirma password
+  password-strength: Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.
+  signup: Sign up
+

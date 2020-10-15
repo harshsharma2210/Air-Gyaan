@@ -1,0 +1,40 @@
+welcome: Welcome to Vuetify
+router-sample: Route sample
+go-post: Go to post page
+for-help: For help and collaboration with other Vuetify developers,
+join-discord: please join our online
+discord-community: Discord Community
+discord-community-alt: Link to Discord Community. Will be opened in a new page.
+discord-url: "https://community.vuetifyjs.com"
+whats-next: What"s next?
+important-links: Important Links
+ecosystem: Ecosystem
+
+ecosystem-entries:
+  - text: vuetify-loader
+    href: "https://github.com/vuetifyjs/vuetify-loader"
+  - text: github
+    href: "https://github.com/vuetifyjs/vuetify"
+  - text: awesome-vuetify
+    href: "https://github.com/vuetifyjs/awesome-vuetify"
+
+important-links-entries:
+  - text: Documentation
+    href: "https://vuetifyjs.com"
+  - text: Chat
+    href: "https://community.vuetifyjs.com"
+  - text: Made with Vuetify
+    href: "https://madewithvuejs.com/vuetify"
+  - text: Twitter
+    href: "https://twitter.com/vuetifyjs"
+  - text: Articles
+    href: "https://medium.com/vuetify"
+
+whats-next-entries:
+  - text: Explore components
+    href: "https://vuetifyjs.com/components/api-explorer"
+  - text: Select a layout
+    href: "https://vuetifyjs.com/getting-started/pre-made-layouts"
+  - text: Frequently Asked Questions
+    href: "https://vuetifyjs.com/getting-started/frequently-asked-questions"
+

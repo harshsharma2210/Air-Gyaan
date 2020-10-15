@@ -1,0 +1,14 @@
+welcome: Bienvenido, {0}
+signout: Salir
+signin:
+  title: Entrar en {0}
+  username: Usuario o cuenta de correo
+  password: Contraseña
+  signin: Acceder
+signup:
+  title: Crear cuenta
+  username: Usuario o cuenta de correo
+  password: Contraseña
+  repeat-password: Repita contraseña
+  password-strength: Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.
+  signup: Crear cuenta

@@ -1,0 +1,34 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables: only with tree shaking works!!!!
+
+// Vuetify SASS variables will go here
+
+$font-size-root: 14px;
+$body-font-family: "Montserrat", sans-serif;
+$color-pack: false;
+$btn-font-weight: 500;
+//$card-border-radius: 0;
+//$card-elevation: 0;
+$icon-size: 20px;
+/* lists */
+$list-item-dense-title-font-weight: bold;
+$list-dense-content-padding: 4px 0;
+$icon-size-dense: 20px;
+$list-dense-icon-height: 20px;
+$list-dense-icon-margin: 6px;
+$list-dense-min-height: 32px;
+/* tables */
+$data-table-regular-header-height: 36px;
+$data-table-regular-row-height: 28px;
+$data-table-regular-header-font-size: 0.8rem;
+$data-table-regular-row-font-size: 0.8rem;
+$data-table-header-sort-badge-height: 20px;
+$data-footer-font-size: 0.85rem;
+$data-footer-padding: 0 8px;
+$data-footer-pagination-margin-end: 0;
+$data-footer-pagination-margin-start: 0;
+$data-footer-select-select-margin-y: 4px;
+$data-footer-select-select-margin-start: 8px;
+/* toobars */
+$toolbar-btn-icon-size: 36px;
+/* THIS MUST BE AT THE END */
+@import '~vuetify/src/styles/styles.sass';
