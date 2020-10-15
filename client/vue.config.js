@@ -37,7 +37,7 @@ const server = (process) => {
  To develop you dont need SASS to be changed, only the ui designer must enable it.
  To enable SASS, remember, a change on variable.scss will recompile all styles
  and can take more than 20 seconds, you must create an .env.<mode>.local file
- and inside it just add SASS=sass: see Webpack entry on GUIDE.md.
+ and inside it just add VUE_APP_SASS=sass: see Webpack entry on GUIDE.md.
  */
 const enableSass =  prod || (process.env.VUE_APP_SASS === "sass");
 
