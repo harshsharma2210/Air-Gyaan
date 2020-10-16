@@ -1,6 +1,7 @@
 // http://kazupon.github.io/vue-i18n/en/messages.html
 import camelCase from "lodash/camelCase";
 import upperFirst from "lodash/upperFirst";
+// import vuetifyMessages from "@/i18n/vuetify/en-ES";
 
 const messages = {
   // $vuetify: vuetifyMessages,

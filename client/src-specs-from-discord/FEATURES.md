@@ -31,3 +31,5 @@ these are the features @Joaquín :point_up_2_tone1:
 # Notes also from SuperSic on discord server => 14/10/2020
 
 [Skeleton pic of the app](UIUX.pdf)
+
+[Basic card skeleton](https://airgyaan.bss.design/profile.html)
