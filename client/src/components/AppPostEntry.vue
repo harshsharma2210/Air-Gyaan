@@ -36,6 +36,6 @@ export default {
 </script>
 <style lang="scss">
 .v-card.post-entry-card {
-  border-radius: 10px !important;
+  border-radius: 16px !important;
 }
 </style>
