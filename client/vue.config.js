@@ -4,6 +4,14 @@ const prod = process.env.NODE_ENV === "production";
 
 const fs = require("fs");
 
+let publicPath = process.env.BASE_URL || "/";
+if (!publicPath.startsWith("/")) {
+  publicPath = `/${publicPath}`;
+}
+if (!publicPath.endsWith("/")) {
+  publicPath += "/";
+}
+
 const server = (process) => {
   const devServer = {};
   if (process.env.HTTPS) {
@@ -21,12 +29,13 @@ const server = (process) => {
   }
   devServer.disableHostCheck = true;
   if (process.env.API_PROXY !== undefined) {
-    devServer.proxy = {
-      "/api": {
-        target: process.env.API_PROXY,
-        secured: process.env.API_PROXY_SECURED
-      }
+    devServer.proxy = {};
+    devServer.proxy[`${publicPath}api`] = {
+      target: process.env.API_PROXY,
+      secured: process.env.API_PROXY_SECURED
     };
+  } else {
+    devServer.setup = require("./dev-server-api");
   }
   return {
     devServer: devServer
@@ -42,6 +51,7 @@ const server = (process) => {
 const enableSass =  prod || (process.env.VUE_APP_SASS === "sass");
 
 const webpackConfiguration = {
+  publicPath,
   transpileDependencies: [
     "vuetify"
   ],
