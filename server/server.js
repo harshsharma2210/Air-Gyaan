@@ -10,7 +10,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./DB.js');
-const postRoute = require('./routes/posts');
 const User = require('./models/user.js');
 const configureRoutes = require('./routes');
 
@@ -40,15 +39,7 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-// const apiPrefix = process.env.API_PREFIX || "/api";
-// /* ADD HERE THE PAIRS: route => handler */
-// const apiRoutes = [
-//   'posts', postRoute
-// ];
-// for (let i = 0; i < apiRoutes.length; i += 2) {
-//   app.use(`${apiPrefix}/${apiRoutes[i]}`, apiRoutes[i + 1]);
-// }
-
+/* LOAD ROUTES DIRECTORY */
 configureRoutes(app, process.env.API_PREFIX || "/api");
 
 app.get('/auth/google',
