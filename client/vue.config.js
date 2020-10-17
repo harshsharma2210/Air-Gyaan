@@ -22,7 +22,7 @@ const server = (process) => {
   devServer.disableHostCheck = true;
   if (process.env.API_PROXY !== undefined) {
     devServer.proxy = {
-      "/posts": {
+      "/api": {
         target: process.env.API_PROXY,
         secured: process.env.API_PROXY_SECURED
       }

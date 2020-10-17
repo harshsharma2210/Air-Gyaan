@@ -17,7 +17,7 @@ export default {
   props: {
     url: {
       type: String,
-      default: "/posts"
+      default: "/api/posts"
     },
     postsSize: {
       type: Number,

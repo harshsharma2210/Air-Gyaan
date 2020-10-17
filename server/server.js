@@ -1,4 +1,4 @@
-const result = require("dotenv").config();
+const result = require("dotenv-flow").config();
 
 if (result.error) {
   throw result.error
@@ -7,12 +7,12 @@ if (result.error) {
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const PORT = 3000;
 const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./DB.js');
 const postRoute = require('./routes/posts');
 const User = require('./models/user.js');
+const configureRoutes = require('./routes');
 
 require('./passport')
 // PASSPORT SETUP
@@ -28,7 +28,7 @@ passport.deserializeUser((id, done) => {
 });
 // MONGOOSE SETUP
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
+mongoose.connect(process.env.MONGO_DB || config.DB, { useNewUrlParser: true }).then(
   () => { console.log('Database is connected') },
   err => { console.log('Can not connect to the database' + err) }
 );
@@ -40,8 +40,16 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/posts', postRoute);
+// const apiPrefix = process.env.API_PREFIX || "/api";
+// /* ADD HERE THE PAIRS: route => handler */
+// const apiRoutes = [
+//   'posts', postRoute
+// ];
+// for (let i = 0; i < apiRoutes.length; i += 2) {
+//   app.use(`${apiPrefix}/${apiRoutes[i]}`, apiRoutes[i + 1]);
+// }
 
+configureRoutes(app, process.env.API_PREFIX || "/api");
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -53,6 +61,7 @@ app.get('/auth/google/callback',
     res.redirect(process.env.FRONTEND_URL);
   });
 
-app.listen(PORT, function () {
-  console.log('Server is running on Port:', PORT);
+const serverPort = process.env.PORT || 3000;
+app.listen(serverPort, function () {
+  console.log('Server is running on Port:', serverPort);
 });
