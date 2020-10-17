@@ -11,7 +11,7 @@ import { useDarkMode } from "@/utils/useDarkMode";
 import apiFetch from "@/mixins/apiFetch";
 
 export default {
-  name: 'Airgyaan',
+  name: 'AirGyaan',
   mixins: [apiFetch],
   components: {
     DefaultLayout: () => import(/* webpackChunkName: "layout-dependencies" */ "@/components/DefaultLayout")
