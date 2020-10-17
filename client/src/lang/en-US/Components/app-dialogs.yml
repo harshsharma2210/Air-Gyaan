@@ -1,0 +1,7 @@
+warningTitle: WARNING
+errorTitle: ERROR
+a11yWarningPrefix: Warning
+a11yErrorPrefix: Error
+closeButton: OK
+confirmButton: OK
+cancelButton: Cancel

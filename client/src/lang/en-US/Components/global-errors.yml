@@ -1,0 +1,11 @@
+genericError: An unexpected error occurred while processing the data. Please try again and if the error persists contact your administrator.
+notYetImplemented: This function is not yet implemented.
+serverDown: The server is down or too busy.
+badConfiguration: The application is wrongly configured, please contact the administrator.
+error404: The request made to the server could not be found.
+error410: The document requested from the server could not be found.
+error500: The server could not complete the requested request.
+error401: Your session has expired, you will be redirected to the access control page when you close this dialog.
+error403: You do not have permission to view the requested data.
+error413: The request is too large, exceeds the maximum allowed size {0}. Delete all the files from the form, submit the data again and access to modify the registry to add the files you require.
+error: An internal error has occurred in the application, please try again and if the error persists contact your administrator.
