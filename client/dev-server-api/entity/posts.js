@@ -1,7 +1,7 @@
 const posts = [];
 const handler = {
   handleGetAll: function(req, res) {
-    res.json(posts);
+    res.json(posts.sort((a, b) => b._id - a._id));
   },
   handleGet: function(req, res) {
     const id = req.params.id;
