@@ -13,10 +13,10 @@
     <v-fade-transition mode="out-in">
       <v-btn
           v-show="loggedIn"
+          color="accent"
           :elevation="addFloating ? 6 : 0"
           :class="['add-post', { fab: addFloating }]"
           :title="addFloating ? $t('App.newPost') : null"
-          color="accent"
           @click="$emit('show-add-post')"
       >
         <span v-show="!addFloating">{{ $t("App.newPost") }}</span>
@@ -92,13 +92,51 @@ export default {
 <style lang="scss">
 .v-bottom-navigation {
   &.theme--light {
-    .v-btn.add-post {
+    .v-btn.add-post.theme--light {
       color: white !important;
+/*
+      &:not(.v-btn--active) {
+        color: white !important;
+      }
+      &:hover {
+        color: white !important;
+      }
+      &:focus {
+        color: black !important;
+        opacity: 0.75 !important;
+        * {
+          color: white !important;
+        }
+        &:hover {
+          * {
+            color: white !important;
+          }
+        }
+      }
+*/
     }
   }
   &.theme--dark {
-    .v-btn.add-post {
+    .v-btn.add-post.theme--dark {
       color: black !important;
+/*
+      &:not(.v-btn--active) {
+        color: black !important;
+      }
+      &:hover {
+        color: black !important;
+      }
+      &:focus {
+        color: white !important;
+        opacity: 0.85 !important;
+        * {
+          color: black !important;
+        }
+        &:hover {
+          opacity: 1 !important;
+        }
+      }
+*/
     }
   }
   .v-btn.add-post {

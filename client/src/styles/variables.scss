@@ -5,7 +5,7 @@
 $font-size-root: 14px;
 $body-font-family: "Montserrat", sans-serif;
 $color-pack: false;
-$btn-font-weight: 500;
+$btn-font-weight: 700;
 //$card-border-radius: 0;
 //$card-elevation: 0;
 $icon-size: 20px;
@@ -30,5 +30,15 @@ $data-footer-select-select-margin-y: 4px;
 $data-footer-select-select-margin-start: 8px;
 /* toobars */
 $toolbar-btn-icon-size: 36px;
+$material-light: (
+        'app-bar': #FFFFFF,
+        'background': #FFFFFF,
+        'chips': #FFFFFF
+);
+$material-dark: (
+        'app-bar': #000000,
+        'background': #000000,
+        'chips': #000000
+);
 /* THIS MUST BE AT THE END */
 @import '~vuetify/src/styles/styles.sass';
