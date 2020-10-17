@@ -64,8 +64,8 @@ export default {
       return await this.apiRequest(url, options);
     },
     async apiRequest(url, options) {
-      const request = await fetchRequestBuilder(options);
-      const response = await fetch(url, request);
+      const request = await fetchRequestBuilder(url, options);
+      const response = await fetch(request);
       return await response.json();
     }
   }
