@@ -1,5 +1,8 @@
 title:
-  new: New post [Spanish]
-  edit: Edit post [Spanish]
-content: Content [Spanish]
-post: Post [Spanish]
+  new: Nueva publicación
+  edit: Editar publicación
+form:
+  title: Título
+  subtitle: Subtítulo
+  body: Contenido
+post: Publicar
