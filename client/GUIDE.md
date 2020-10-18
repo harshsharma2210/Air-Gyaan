@@ -233,3 +233,71 @@ You can see `vue-config.js` to see how to start server on a distinct port: see `
 In these files (mongo variants) you will need to include the server port where server is running to proxy all requests.
 
 I only have included `/post` request to be proxied to the server rest api.
+
+## Fetch api abstraction
+
+To avoid add redundant code to fecth resources from server, I have included an abstraction over `fetch` function to do explicit
+calls:
+
+- `apiGet`: to do a `GET` with options and query parameters
+- `apiPost`: to do a `POST` with body, options and query parameters
+- `apiPut`: to do a `PUT` with body, options and query parameters
+- `apiDelete`: to do a `DELETE` with body, options and query parameters
+
+There is a utility function, `fetchRequestBuilder`, to allow build url and request body, can be imported from: 
+`@/utils/fetch/fetchRequestBuilder`.
+
+You don't need to use directly this helper function, just import `@/mixins/apiFetch` mixin where needed, and then add:
+`mixin: [apiFetch]` to your component/page.
+
+This `apiFetch` mixin has the `api***` variant methods. It will parse the response as `json`, so if you need to add
+some other response type, like `text` or `blob`, just include it as a separate function on it.
+
+One thing you have to keep in mind is that all requests must be agnostic to the `server context`, as well as to the `api` prefix.
+
+The `server context` normally is `ROOT` or `/`: the server context will be `/`, but can be some other, for example:
+
+- `/what-you-want`: the url of the app then, will be prefixed with this path.
+- `/development`: the url of the app then, will be prefixed with this path.
+- `/preproduction`: the url of the app then, will be prefixed with this path.
+
+This `server context` can be configured using the `dotenv` variable `BASE_URL` (`process.env.BASE_URL`).
+You can see it on `vue-config.js` file:
+
+```javascript
+let publicPath = process.env.BASE_URL || "/";
+if (!publicPath.startsWith("/")) {
+  publicPath = `/${publicPath}`;
+}
+if (!publicPath.endsWith("/")) {
+  publicPath += "/";
+}
+```
+
+and configured here:
+
+```javascript
+const webpackConfiguration = {
+  publicPath,
+  transpileDependencies: [
+    "vuetify"
+  ],
+  ...
+}
+```
+
+Remember, `{ publicPath }` is the same as `{ publicPath: publicPath }`, so you can see [publicPath](https://cli.vuejs.org/config/#publicpath)
+for a detailed explanation.
+
+For example, methods that `apiFetch` mixin exposes, all begin with `api`, so there is no need to include `api` when calling
+`api***` methods:
+
+- a `POST` call to `sign-in` url, will post to `/api/sign-in`, relative to `server context`.
+- a `POST` call to `sign-out` url will post to `/api/sign-in`, relative to `server context`.
+- a `GET` call to `avatar/xxxx` url will get to `/api/avatar/xxx`, relative to `server context`.
+- a `GET` call to `posts` url will get to `/api/posts`, relative to `server context`.
+
+If you need to do a request agnostic to `api`, you just prefix the url with `/`, for example:
+
+- `/a/b/a/c/d` will build the url as it is, relative to `server context`.
+
