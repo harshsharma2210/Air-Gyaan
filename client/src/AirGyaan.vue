@@ -7,6 +7,9 @@
 </template>
 
 <script>
+//todo@userquin: mock login until clarified
+const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
+
 import { useDarkMode } from "@/utils/useDarkMode";
 import apiFetch from "@/mixins/apiFetch";
 
@@ -32,6 +35,13 @@ export default {
   async beforeDestroy() {
     this.darkDetector && this.darkDetector.destroy();
     this.darkDetector = null;
+  },
+  methods: {
+    async checkContext() {
+      if (mockUiLogin === false) {
+        await apiFetch.methods.checkContext.call(this);
+      }
+    }
   }
 };
 </script>
