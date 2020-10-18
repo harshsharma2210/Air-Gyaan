@@ -94,7 +94,6 @@ export default {
   &.theme--light {
     .v-btn.add-post.theme--light {
       color: white !important;
-/*
       &:not(.v-btn--active) {
         color: white !important;
       }
@@ -113,13 +112,11 @@ export default {
           }
         }
       }
-*/
     }
   }
   &.theme--dark {
     .v-btn.add-post.theme--dark {
       color: black !important;
-/*
       &:not(.v-btn--active) {
         color: black !important;
       }
@@ -136,7 +133,6 @@ export default {
           opacity: 1 !important;
         }
       }
-*/
     }
   }
   .v-btn.add-post {
