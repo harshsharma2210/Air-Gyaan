@@ -1,62 +1,54 @@
-const posts = [];
+const {
+  populateData,
+  addNewEntity,
+  updateEntity,
+  doGetAll,
+  doGet,
+  doDelete
+} = require("../entity-helper");
+
 const handler = {
   handleGetAll: function(req, res) {
-    res.json(posts.sort((a, b) => b._id - a._id));
+    doGetAll(res);
   },
   handleGet: function(req, res) {
-    const id = req.params.id;
-    res.json(posts.find(p => p._id === id));
+    doGet(req, res);
+  },
+  handleDelete: function(req, res) {
+    doDelete(req, res);
   },
   handleCreate: function(req, res) {
-    const id = posts.length + 1;
     const {
       title,
       subtitle = null,
       body
     } = req.body;
-    posts.push({
-      title,
-      subtitle,
-      body
-    }, {
-      _id: `${id}`,
-      __lu: new Date().toISOString(),
-      __v: 0
-    })
-    res.json({ created: true });
+    addNewEntity(
+      {
+        title,
+        subtitle,
+        body
+      },
+      res
+    );
   },
   handleUpdate: function(req, res) {
-    const id = req.params.id;
-    const post = posts.find(p => p._id === id);
-    const updated = !!post;
-    if (updated) {
+    updateEntity(req, res, r => {
       const {
         title,
         subtitle = null,
         body
-      } = req.body;
-      Object.assign(post,{
+      } = r.body;
+      return {
         title,
         subtitle,
-        body,
-        __lu: new Date().toISOString(),
-        __v: post.__v + 1
-      });
-    }
-    res.json({ updated });
-  },
-  handleDelete: function(req, res) {
-    const id = req.params.id;
-    const idx = posts.findIndex(p => p._id === id);
-    const deleted = idx > -1;
-    if (deleted) {
-      posts.splice(idx, 1);
-    }
-    res.json({ deleted });
+        body
+      }
+    })
   },
   populateSomeData: function() {
     for (let i = 0; i < 3; i++) {
-      posts.push({
+      populateData({
         _id: `${i + 1}`,
         title: `Post ${i + 1}`,
         subtitle: `Subtitle ${i + 1}`,

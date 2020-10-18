@@ -301,3 +301,48 @@ If you need to do a request agnostic to `api`, you just prefix the url with `/`,
 
 - `/a/b/a/c/d` will build the url as it is, relative to `server context`.
 
+## Dev Server Api
+
+To allow the application to be used without the server module running (which involves installing mongo db), a mock up 
+has been included to allow developers to work with simulated data.
+
+It must be taken into account that said mock must preserve the paths of the server module, that is, even if the data is 
+simulated, the requests that are made must be the same as those made to the real server module.
+
+This mock is synchronous and does not solve concurrency problems; it does not use `async / await`, so it may be a bit slow, 
+but since it is for a single developer who will be connected as the client of the web application, you should not 
+have any problem.
+
+There are 2 modules, `users` and `entity`: both configured to just drop new modules and restarting client will be available.
+
+Remember that this mock has no hot reload capabilities, so a change will need a client module restart to load changes made.
+
+### Users module
+
+To include a new one user, just copy/paste an existing one, change its filename and modify the data for that user.
+
+The data must follow the server module `User` spec, that is (at time writing this doc):
+
+```javascript
+{
+    email: String,
+    platformId: String,
+    name: String,
+    pic: String
+}
+```
+
+`platformId` is optional, if not included, the name of the file without `.js` extension will be used.
+
+If you want to add its avatar, just drop in the same directory a `png` image with the `platformId` as name, `index.js`
+will find it and use it.
+
+### Entity module
+
+To include a new one entity, just copy/paste an existing one, change its filename and modify these 3 methods to reflect
+it data:
+
+- `handleCreate`
+- `handleUpdate`
+- `populateSomeData`
+
