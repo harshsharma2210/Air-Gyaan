@@ -248,7 +248,7 @@ There is a utility function, `fetchRequestBuilder`, to allow build url and reque
 `@/utils/fetch/fetchRequestBuilder`.
 
 You don't need to use directly this helper function, just import `@/mixins/apiFetch` mixin where needed, and then add:
-`mixin: [apiFetch]` to your component/page.
+`mixins: [apiFetch]` to your component/page.
 
 This `apiFetch` mixin has the `api***` variant methods. It will parse the response as `json`, so if you need to add
 some other response type, like `text` or `blob`, just include it as a separate function on it.
@@ -346,3 +346,14 @@ it data:
 - `handleUpdate`
 - `populateSomeData`
 
+The name of the file without `.js` extension will be used as the mapping on the express router.
+
+These are the mappings added to the `express` mock server (you can find it on `dev-serve-api/entity/index.js` script):
+
+```javascript
+app.get(`${apiUriPath}${name}`, handleGetAll);
+app.get(`${apiUriPath}${name}/edit/:id`, handleGet);
+app.post(`${apiUriPath}${name}/add`, handleCreate);
+app.put(`${apiUriPath}${name}/update/:id`, handleUpdate);
+app.delete(`${apiUriPath}${name}/delete/:id`, handleDelete);
+```
