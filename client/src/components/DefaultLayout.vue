@@ -120,6 +120,7 @@
       >
         <app-post
             v-if="showAddPost"
+            dialog
             @cancel-post="showAddPost = false"
             @add-post="addPost"
         />
@@ -127,6 +128,9 @@
   </v-app>
 </template>
 <script>
+//todo@userquin: mock login until clarified
+const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
+
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
 
@@ -176,7 +180,17 @@ export default {
     async signIn({ username, password }) {
       await this.configureBusy(true);
       try {
-        const data = await this.requestSignIn(username, password);
+        let data;
+        if (mockUiLogin) {
+          data = {
+            authenticated: true,
+            platformId: "userquin",
+            email: "userquin@gmail.com",
+            name: "Joaquín"
+          };
+        } else {
+          data = await this.requestSignIn(username, password);
+        }
         await this.processLogin(data);
         await this.configureBusy(false);
         await this.$nextTick();
@@ -194,11 +208,9 @@ export default {
         await this.configureBusy(false);
       }
     },
-    async addPost(post) {
-      await this.configureBusy(true);
+    async addPost(body) {
       try {
-        console.info(`Adding post ${JSON.stringify(post)}`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await this.apiPost("posts/add", { body });
         await this.configureBusy(false);
         await this.$nextTick();
         this.showAddPost = false;
