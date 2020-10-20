@@ -27,4 +27,8 @@ $color-pack: false;
   caret-color: var(--v-secondary-base)  !important
 }
 
+main.v-main .v-main__wrap {
+  padding: 16px;
+}
+
 @import '~vuetify/src/styles/main.sass';

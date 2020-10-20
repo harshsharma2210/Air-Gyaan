@@ -1,5 +1,8 @@
 title:
   new: New post
   edit: Edit post
-content: Content
+form:
+  title: Title
+  subtitle: Subtitle
+  body: Content
 post: Post

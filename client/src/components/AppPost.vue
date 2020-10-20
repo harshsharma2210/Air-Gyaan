@@ -2,16 +2,34 @@
   <v-card>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <v-form class="post-form pt-4" @submit.prevent="fireSubmit">
+      <v-form ref="form" v-model="valid" lazy-validation class="post-form pt-4" @submit.prevent="">
         <v-text-field
-            ref="post"
-            v-model="form.post"
-            :label="$t('Components.Post.content')"
-            :rules="postRules"
-            counter
+            ref="title"
+            v-model="form.title"
+            :label="$t('Components.Post.form.title')"
+            :rules="titleRules"
+            counter="64"
             dense
             @keyup.enter.prevent="fireSubmit"
         ></v-text-field>
+        <v-text-field
+            ref="subtitle"
+            v-model="form.subtitle"
+            :label="$t('Components.Post.form.subtitle')"
+            :rules="subtitleRules"
+            counter="64"
+            dense
+            @keyup.enter.prevent="fireSubmit"
+        ></v-text-field>
+        <v-textarea
+            ref="body"
+            v-model="form.body"
+            :label="$t('Components.Post.form.body')"
+            :rules="bodyRules"
+            counter="255"
+            dense
+            @keyup.ctrl.enter.prevent="fireSubmit"
+        ></v-textarea>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -20,6 +38,7 @@
           ref="cancel"
           outlined
           class="ma-2 px-4"
+          :disabled="busy"
           @click.native.prevent="$emit('cancel-post')"
       >
         {{ $t("App.cancel") }}
@@ -29,6 +48,7 @@
           outlined
           class="ma-2 px-4"
           :loading="busy"
+          :disabled="busy || !valid"
           @click.native.prevent="fireSubmit"
       >
         {{ $t("Components.Post.post") }}
@@ -37,7 +57,7 @@
   </v-card>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "app-post",
@@ -45,11 +65,12 @@ export default {
     dialog: Boolean
   },
   data: () => ({
+    valid: true,
     form: {
-      username: null,
-      password: null
-    },
-    showPassword: false
+      title: null,
+      subtitle: null,
+      body: null
+    }
   }),
   computed: {
     ...mapState(["busy"]),
@@ -59,13 +80,24 @@ export default {
       }
       return this.$t("Components.Post.title.edit");
     },
-    postRules() {
-      return this.fieldValidator();
+    titleRules() {
+      return this.titleValidator();
+    },
+    subtitleRules() {
+      return this.subtitleValidator();
+    },
+    bodyRules() {
+      return this.bodyValidator();
     },
     formValues() {
-      return {
-        post: this.form.post && this.form.post.trim()
+      if (this.form) {
+        return {
+          title: this.form.title && this.form.title.trim(),
+          subtitle: this.form.subtitle && this.form.subtitle.trim(),
+          body: this.form.body && this.form.body.trim()
+        }
       }
+      return null;
     }
   },
   mounted() {
@@ -75,13 +107,21 @@ export default {
     await this.resetForm();
   },
   methods: {
+    ...mapActions(["configureBusy"]),
     async resetForm() {
-      this.form.post = null;
+      await this.$refs.form.reset();
     },
     async fireSubmit() {
-      this.$emit("add-post", this.formValues);
+      await this.configureBusy(true);
+      const valid = this.$refs.form.validate();
+      await this.$nextTick();
+      if (valid) {
+        this.$emit("add-post", this.formValues);
+      } else {
+        await this.configureBusy(false);
+      }
     },
-    async focusElement(initial = false, el = "post") {
+    async focusElement(initial = false, el = "title") {
       if (initial) {
         await new Promise(resolve => setTimeout(resolve, 450));
       } else {
@@ -89,15 +129,31 @@ export default {
       }
       this.$refs[el].focus();
     },
-    fieldValidator() {
+    titleValidator() {
       const vm = this;
-      return [value => vm.requiredField(value)];
+      return [value => vm.requiredField(value), () => vm.maxTextSize(vm.form.title, 64)];
+    },
+    subtitleValidator() {
+      const vm = this;
+      return [() => vm.maxTextSize(vm.form.subtitle, 64)];
+    },
+    bodyValidator() {
+      const vm = this;
+      return [value => vm.requiredField(value), () => vm.maxTextSize(vm.form.body, 255)];
     },
     requiredField(value) {
       if (value && value.trim().length > 0) {
         return true;
       } else {
         return this.$t("Components.Validations.required");
+      }
+    },
+    maxTextSize(value, max) {
+      // this validation MUST NOT check if value is required: that is, if empty is valid
+      if (!value || max >= value.trim().length) {
+        return true;
+      } else {
+        return this.$t("Components.Validations.max", [`${max}`]);
       }
     }
   }

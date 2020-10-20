@@ -1,5 +1,5 @@
 <template>
-  <div class="posts-container">
+  <div :class="['posts-container', { mobile: $vuetify.breakpoint.mobile }]">
     <app-post-entry v-for="(post, idx) in posts" :key="`${idx}-${post._id}`" :post="post" />
     <infinite-loading @infinite="loadPosts" :distance="postsSize">
 <!--      <template #noResults></template>-->
@@ -9,15 +9,19 @@
   </div>
 </template>
 <script>
+import apiFetch from "@/mixins/apiFetch";
+
 import AppPostEntry from "@/components/AppPostEntry";
 import InfiniteLoading from 'vue-infinite-loading';
+
 export default {
   name: "AppPosts",
+  mixins: [apiFetch],
   components: { AppPostEntry, InfiniteLoading },
   props: {
     url: {
       type: String,
-      default: "/posts"
+      default: "posts"
     },
     postsSize: {
       type: Number,
@@ -30,8 +34,7 @@ export default {
   methods: {
     async loadPosts(state) {
       try {
-        const response = await fetch(this.url);
-        const posts = await response.json();
+        const posts = await this.apiGet(this.url);
         if (posts.length > 0) {
           this.posts.push(...posts);
           state.loaded();
@@ -39,6 +42,7 @@ export default {
           state.complete();
         }
       } catch (e) {
+        console.error("Opps, something went wrong requesting posts", e);
         state.error();
       }
     }
@@ -47,10 +51,12 @@ export default {
 </script>
 <style lang="scss">
 .posts-container {
-  padding: 16px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
-  grid-row-gap: 8px;
+  grid-row-gap: 16px;
+  &.mobile {
+    grid-row-gap: 8px;
+  }
 }
 </style>

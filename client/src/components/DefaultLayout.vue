@@ -8,6 +8,12 @@
         <v-toolbar-title>{{ $t("App.title") }}</v-toolbar-title>
         <v-spacer />
         <div key="welcome" v-show="loggedIn && !smallButtons" class="separate-user">{{ welcome }}</div>
+        <v-avatar key="avatar" v-show="loggedIn && userAvatar" class="separate-avatar" size="36px">
+          <img
+              :src="userAvatar"
+              :alt="$t('App.avatar', [userName])"
+          >
+        </v-avatar>
         <v-menu
             key="languages"
             bottom
@@ -69,7 +75,7 @@
               </v-btn>
             </template>
             <v-list dense subheader>
-              <v-subheader>{{ userName }}</v-subheader>
+              <v-list-item-title><v-subheader class="subtitle-1 text--primary justify-center">{{ userName }}</v-subheader></v-list-item-title>
               <v-list-item @click.prevent="switchDarkLightMode">
                 <v-list-item-action>
                   <v-icon>{{ darkLightIcon }}</v-icon>
@@ -114,6 +120,7 @@
       >
         <app-post
             v-if="showAddPost"
+            dialog
             @cancel-post="showAddPost = false"
             @add-post="addPost"
         />
@@ -121,15 +128,20 @@
   </v-app>
 </template>
 <script>
+//todo@userquin: mock login until clarified
+const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
+
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
 
 import SignIn from "@/components/SignIn";
 import AppPost from "@/components/AppPost";
 import AppNavigation from "@/components/AppNavigation";
+import apiFetch from "@/mixins/apiFetch";
 
 export default {
   name: "default-layout",
+  mixins: [apiFetch],
   components: { AppNavigation, SignIn, AppPost },
   data: () => ({
     available: languages,
@@ -138,7 +150,7 @@ export default {
     showSignUp: false
   }),
   computed: {
-    ...mapState(["loggedIn", "userName"]),
+    ...mapState(["loggedIn", "userName", "userAvatar"]),
     welcome() {
       if (this.userName) {
         return this.$t("Components.User.welcome", [this.userName]);
@@ -156,7 +168,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["configureBusy", "processLogin"]),
+    ...mapActions(["configureBusy"]),
     async changeLocale(locale) {
       await changeLanguage(locale);
     },
@@ -168,9 +180,18 @@ export default {
     async signIn({ username, password }) {
       await this.configureBusy(true);
       try {
-        console.info(`Using ${username}/***** credentials`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await this.processLogin({ authenticated: true, userId: 1, userName: "Joaquín Sánchez Jiménez"});
+        let data;
+        if (mockUiLogin) {
+          data = {
+            authenticated: true,
+            platformId: "userquin",
+            email: "userquin@gmail.com",
+            name: "Joaquín"
+          };
+        } else {
+          data = await this.requestSignIn(username, password);
+        }
+        await this.processLogin(data);
         await this.configureBusy(false);
         await this.$nextTick();
         this.showSignIn = false;
@@ -182,18 +203,14 @@ export default {
     async signOut() {
       await this.configureBusy(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 150));
+        await this.requestSignOut();
       } finally {
-        //todo: handle error
-        await this.processLogin({ autheticated: false });
         await this.configureBusy(false);
       }
     },
-    async addPost(post) {
-      await this.configureBusy(true);
+    async addPost(body) {
       try {
-        console.info(`Adding post ${JSON.stringify(post)}`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await this.apiPost("posts/add", { body });
         await this.configureBusy(false);
         await this.$nextTick();
         this.showAddPost = false;
@@ -211,5 +228,8 @@ export default {
 }
 .separate-user {
   padding-right: 16px;
+}
+.separate-avatar {
+  margin-right: 24px;
 }
 </style>

@@ -1,0 +1,11 @@
+genericError: Se ha producido un error inesperado al procesar los datos. Inténtelo de nuevo y si el error persiste póngase en contacto con el administrador.
+notYetImplemented: Esta funcionalidad todavía no está implementada.
+serverDown: El servidor está parado o demasiado ocupado.
+badConfiguration: La aplicación está mal configurada, por favor contacte con el administrador.
+error404: La solicitud realizada al servidor no se ha encontrado.
+error410: El documento solicitado al servidor no se ha encontrado.
+error500: El servidor no ha podido completar la petición solicitada.
+error401: Su sesión ha caducado, será redirigido a la página de control de acceso al cerrar este diálogo.
+error403: No tiene permisos para consultar los datos solicitados.
+error413: La solicitud es demasiado grande, excede el tamaño máximo permitido {0}. Elimine todos los archivos del formulario, envíe los datos de nuevo y acceda para modificar el registro para añadir los archivos que requiera.
+error: Ha ocurrido un error interno en la aplicación, inténtelo de nuevo y si el error persiste póngase en contacto con el administrador.

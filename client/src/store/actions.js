@@ -2,10 +2,10 @@ export default {
   async configureBusy({ commit }, busy) {
     commit("setBusy", busy);
   },
-  processLogin({ commit }, payload) {
+  async processLogin({ commit }, payload) {
     commit("setContextInfo", payload);
   },
-  updateNotifications({ commit }, payload) {
+  async updateNotifications({ commit }, payload) {
     commit("setNotifications", payload)
   }
 };
