@@ -5,6 +5,9 @@ signin:
   username: Username or email address
   password: Password
   signin: Sign In
+  google: Google
+  facebook: Facebook
+  linkedin: LinkedIn
 signup:
   title: Create your account
   subtitle: Join {0}

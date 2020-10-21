@@ -109,13 +109,13 @@
       <app-navigation @show-add-post="showAddPost = true"></app-navigation>
       <v-dialog
           v-model="showSignIn"
-          max-width="460px"
+          max-width="500px"
       >
         <sign-in v-if="showSignIn" @signin="signIn" />
       </v-dialog>
       <v-dialog
           v-model="showAddPost"
-          max-width="460px"
+          max-width="500px"
           persistent
       >
         <app-post

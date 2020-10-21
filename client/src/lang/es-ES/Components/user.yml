@@ -5,6 +5,9 @@ signin:
   username: Usuario o cuenta de correo
   password: Contraseña
   signin: Acceder
+  google: Google
+  facebook: Facebook
+  linkedin: LinkedIn
 signup:
   title: Crear cuenta
   username: Usuario o cuenta de correo

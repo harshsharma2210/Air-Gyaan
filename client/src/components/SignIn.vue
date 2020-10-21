@@ -38,6 +38,36 @@
           :loading="busy"
           @click.native.prevent="fireSubmit"
       >
+        {{ $t("Components.User.signin.google") }}
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+          ref="access"
+          outlined
+          class="ma-2 px-4"
+          :loading="busy"
+          @click.native.prevent="fireSubmit"
+      >
+        {{ $t("Components.User.signin.facebook") }}
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+          ref="access"
+          outlined
+          class="ma-2 px-4"
+          :loading="busy"
+          @click.native.prevent="fireSubmit"
+      >
+        {{ $t("Components.User.signin.linkedin") }}
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+          ref="access"
+          outlined
+          class="ma-2 px-4"
+          :loading="busy"
+          @click.native.prevent="fireSubmit"
+      >
         {{ $t("Components.User.signin.signin") }}
       </v-btn>
     </v-card-actions>
