@@ -14,6 +14,7 @@ const User = require('./models/user.js');
 const configureRoutes = require('./routes');
 
 require('./passport')
+
 // PASSPORT SETUP
 const passport = require("passport");
 passport.serializeUser((user, done) => {
