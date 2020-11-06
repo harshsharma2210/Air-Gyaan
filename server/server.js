@@ -13,8 +13,8 @@ const config = require('./DB.js');
 const User = require('./models/user.js');
 const configureRoutes = require('./routes');
 
-require('./passport')
-
+require('./passport');
+ 
 // PASSPORT SETUP
 const passport = require("passport");
 passport.serializeUser((user, done) => {
