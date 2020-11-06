@@ -42,12 +42,11 @@ app.use(passport.session());
 /* LOAD ROUTES DIRECTORY */
 configureRoutes(app, process.env.API_PREFIX || "/api");
 
-
 /*CALLBACK*/
 
 // SIGNIN TOKEN
 const signToken = (user) => {
-  return JWT.sign({ id: user._id, name: user.name, email: user.email, pic: user.pic }, process.env.JWT_KEY, { expiresIn: 86400 * 7 });
+    return JWT.sign({ id: user._id, name: user.name, email: user.email, pic: user.pic }, process.env.JWT_KEY, { expiresIn: 86400 * 7 });
 }
 
 // GOOGLE CALLBACK
