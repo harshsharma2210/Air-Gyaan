@@ -28,7 +28,7 @@ passport.deserializeUser((id, done) => {
 });
 // MONGOOSE SETUP
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGO_DB || config.DB, { useNewUrlParser: true }).then(
+mongoose.connect(process.env.MONGO_DB || config.DB, { useNewUrlParser: true ,useUnifiedTopology: true }).then(
   () => { console.log('Database is connected') },
   err => { console.log('Can not connect to the database' + err) }
 );
