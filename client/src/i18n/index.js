@@ -30,7 +30,7 @@ const languageCookiePath = process.env.BASE_URL || "/";
 const setI18nLanguage = lang => {
   i18n.locale = lang;
   document.querySelector("html").setAttribute("lang", lang);
-  document.cookie = `${languageCookieName}=${lang};path=${languageCookiePath}`;
+  document.cookie = `${languageCookieName}=${lang};path=${languageCookiePath}; SameSite: Lax`;
   return lang;
 };
 
