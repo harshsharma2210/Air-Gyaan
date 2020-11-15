@@ -98,8 +98,8 @@
         <div key="normal" v-else class="separate-bar">
           <v-btn icon :title="darkLightText" @click="switchDarkLightMode"><v-icon>{{ darkLightIcon }}</v-icon></v-btn>
           <v-btn v-show="loggedIn"  key="signout" icon :title="$t('Components.User.signout')" @click="signOut"><v-icon>$vuetify.icons.signout</v-icon></v-btn>
-          <v-btn v-show="!loggedIn" key="signin" icon :title="$t('Components.User.signin.signin')" @click="showSignIn = true"><v-icon>$vuetify.icons.signin</v-icon></v-btn>
-          <v-btn v-show="!loggedIn" key="signup" icon :title="$t('Components.User.signup.signup')"><v-icon>$vuetify.icons.signup</v-icon></v-btn>
+          <v-btn v-show="!loggedIn" key="signin" icon :title="$t('Components.User.signin.signin')" @click.native.prevent="$router.push({ name: 'sign-in' })"><v-icon>$vuetify.icons.signin</v-icon></v-btn>
+          <v-btn v-show="!loggedIn" key="signup" icon :title="$t('Components.User.signup.signup')" @click.native.prevent="$router.push({ name: 'sign-up' })"><v-icon>$vuetify.icons.signup</v-icon></v-btn>
         </div>
       </v-app-bar>
 
@@ -107,12 +107,6 @@
         <router-view></router-view>
       </v-main>
       <app-navigation @show-add-post="showAddPost = true"></app-navigation>
-      <v-dialog
-          v-model="showSignIn"
-          max-width="500px"
-      >
-        <sign-in v-if="showSignIn" @signin="signIn" />
-      </v-dialog>
       <v-dialog
           v-model="showAddPost"
           max-width="500px"
@@ -134,7 +128,6 @@ const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
 
-import SignIn from "@/components/SignIn";
 import AppPost from "@/components/AppPost";
 import AppNavigation from "@/components/AppNavigation";
 import apiFetch from "@/mixins/apiFetch";
@@ -142,13 +135,21 @@ import apiFetch from "@/mixins/apiFetch";
 export default {
   name: "default-layout",
   mixins: [apiFetch],
-  components: { AppNavigation, SignIn, AppPost },
+  components: { AppNavigation, AppPost },
   data: () => ({
     available: languages,
-    showSignIn: false,
     showAddPost: false,
     showSignUp: false
   }),
+  provide() {
+    return {
+      signIn: this.signIn,
+      signup: this.signUp
+    }
+  },
+  async beforeMount() {
+    this.$router.afterEach(this.changeSeo);
+  },
   computed: {
     ...mapState(["loggedIn", "userName", "userAvatar"]),
     welcome() {
@@ -165,6 +166,13 @@ export default {
     },
     smallButtons() {
       return this.$vuetify.breakpoint.xs;
+    }
+  },
+  watch: {
+    async loggedIn() {
+      if (!!this.$route || this.$route.name !== "home") {
+        await this.$router.push({ name: "home"});
+      }
     }
   },
   methods: {
@@ -194,7 +202,6 @@ export default {
         await this.processLogin(data);
         await this.configureBusy(false);
         await this.$nextTick();
-        this.showSignIn = false;
       } catch (e) {
         //todo: handle error
         await this.configureBusy(false);
@@ -207,6 +214,9 @@ export default {
       } finally {
         await this.configureBusy(false);
       }
+    },
+    async signUp(/*{ username, password }*/) {
+
     },
     async addPost(body) {
       try {
