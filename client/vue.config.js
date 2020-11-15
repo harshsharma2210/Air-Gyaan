@@ -78,13 +78,22 @@ const webpackConfiguration = {
       Webpack can compile JSON to javascript modules, these lines will convert yaml files to json modules
     */
     config.resolve.extensions.add(".yml").add(".yaml");
-    config.module
-      .rule("yaml")
-      .test(/\.ya?ml$/)
-      .type("json")
-      .use("yaml-loader")
-      .loader("yaml-loader")
-      .end();
+    if (process.env.VUE_APP_NODE_12) {
+      config.module
+        .rule("yaml")
+        .test(/\.ya?ml$/)
+        .use("yaml-loader")
+        .loader("yaml-loader")
+        .end();
+    } else {
+      config.module
+        .rule("yaml")
+        .test(/\.ya?ml$/)
+        .type("json")
+        .use("yaml-loader")
+        .loader("yaml-loader")
+        .end();
+    }
     if (enableSass) {
       /*
         Enable change vuetify SASS variables:
