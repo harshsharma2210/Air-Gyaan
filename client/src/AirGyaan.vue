@@ -53,7 +53,7 @@ export default {
         const { meta } = to;
         let title = meta && meta.title;
         if (!title || title.length === 0) {
-          title = this.$t(`Views.${upperFirst(camelCase(to.name))}.title`);
+          title = `Views.${upperFirst(camelCase(to.name))}.title`;
         }
         document.title = [
           this.$t(title),

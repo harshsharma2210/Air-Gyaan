@@ -81,10 +81,31 @@ const webpackConfiguration = {
     config.module
       .rule("yaml")
       .test(/\.ya?ml$/)
-      .type("json")
+      .use('json-loader')
+      .loader('json-loader')
+      .end()
       .use("yaml-loader")
       .loader("yaml-loader")
       .end();
+    // if (process.env.VUE_APP_NODE_12) {
+    //   config.module
+    //     .rule("yaml")
+    //     .test(/\.ya?ml$/)
+    //     .use('json-loader')
+    //     .loader('json-loader')
+    //     .end()
+    //     .use("yaml-loader")
+    //     .loader("yaml-loader")
+    //     .end();
+    // } else {
+    //   config.module
+    //     .rule("yaml")
+    //     .test(/\.ya?ml$/)
+    //     .type("json")
+    //     .use("yaml-loader")
+    //     .loader("yaml-loader")
+    //     .end();
+    // }
     if (enableSass) {
       /*
         Enable change vuetify SASS variables:

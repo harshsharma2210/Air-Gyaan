@@ -81,7 +81,7 @@ export default {
   methods: {
     async navigateTo(name) {
       await this.$nextTick();
-      await this.$router.push(name);
+      await this.$router.push({ name });
     },
     async onScroll(e) {
       this.addFloating = e.target.scrollingElement.scrollTop === 0;
