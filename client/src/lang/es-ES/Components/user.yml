@@ -1,17 +1,21 @@
 welcome: Bienvenido, {0}
 signout: Salir
 signin:
-  title: Entrar en {0}
+  title: Entrar
+  card-title: Entrar en {0}
   username: Usuario o cuenta de correo
   password: Contraseña
   signin: Acceder
-  google: Google
-  facebook: Facebook
-  linkedin: LinkedIn
+  google: Entrar con Google
+  facebook: Entrar con Facebook
+  linkedin: Entrar con LinkedIn
 signup:
-  title: Crear cuenta
+  title: Crea tu cuenta
   username: Usuario o cuenta de correo
   password: Contraseña
   repeat-password: Repita contraseña
   password-strength: Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.
   signup: Crear cuenta
+  google: Crear cuenta con Google
+  facebook: Crear cuenta con Facebook
+  linkedin: Crear cuenta con LinkedIn

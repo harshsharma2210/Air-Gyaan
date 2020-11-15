@@ -1,13 +1,14 @@
 <template>
-  <div :class="['sign-in-container', { mobile: $vuetify.breakpoint.xsOnly }]">
+  <div :class="['sign-up-container', { mobile: $vuetify.breakpoint.xsOnly }]">
     <v-card class="elevation-0 border-0">
       <v-card-title class="justify-center">{{ title }}</v-card-title>
+      <v-card-subtitle class="text-center">{{ subtitle }}</v-card-subtitle>
       <v-card-text>
-        <v-form ref="form" class="signin-form pt-4" @submit.prevent="fireSubmit"  lazy-validation>
+        <v-form class="signup-form pt-4" @submit.prevent="fireSubmit" lazy-validation>
           <v-text-field
               ref="username"
               v-model="form.username"
-              :label="$t('Components.User.signin.username')"
+              :label="$t('Components.User.signup.username')"
               :rules="usernameRules"
               counter
               dense
@@ -20,7 +21,7 @@
               :type="passwordType"
               v-model="form.password"
               :append-icon="passwordIcon"
-              :label="$t('Components.User.signin.password')"
+              :label="$t('Components.User.signup.password')"
               :rules="passwordRules"
               counter
               dense
@@ -39,7 +40,7 @@
             :loading="busy"
             @click.native.prevent="fireSubmit"
         >
-          {{ $t("Components.User.signin.signin") }}
+          {{ $t("Components.User.signup.signup") }}
         </v-btn>
       </v-card-actions>
       <v-card-actions>
@@ -52,7 +53,7 @@
             @click.native.prevent="fireSubmit"
         >
           <v-icon left>$vuetify.icons.google</v-icon>
-          {{ $t("Components.User.signin.google") }}
+          {{ $t("Components.User.signup.google") }}
         </v-btn>
         <v-btn
             ref="facebook"
@@ -63,7 +64,7 @@
             @click.native.prevent="fireSubmit"
         >
           <v-icon left>$vuetify.icons.facebook</v-icon>
-          {{ $t("Components.User.signin.facebook") }}
+          {{ $t("Components.User.signup.facebook") }}
         </v-btn>
         <v-btn
             ref="linkedin"
@@ -74,7 +75,7 @@
             @click.native.prevent="fireSubmit"
         >
           <v-icon left>$vuetify.icons.linkedin</v-icon>
-          {{ $t("Components.User.signin.linkedin") }}
+          {{ $t("Components.User.signup.linkedin") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -82,11 +83,10 @@
 </template>
 <script>
 import { mapState } from "vuex";
-
 export default {
-  name: "sign-in",
+  name: "sign-up",
   inject: {
-    signIn: {
+    signUp: {
       default: null
     }
   },
@@ -100,7 +100,10 @@ export default {
   computed: {
     ...mapState(["busy"]),
     title() {
-      return this.$t("Components.User.signin.card-title", [this.$t("App.title")]);
+      return this.$t("Components.User.signup.title");
+    },
+    subtitle() {
+      return this.$t("Components.User.signup.subtitle", [this.$t("App.title")]);
     },
     usernameRules() {
       return this.fieldValidator();
@@ -128,7 +131,7 @@ export default {
     }
   },
   mounted() {
-    this.focusElement(true);
+    this.focusElement();
   },
   async beforeDestroy() {
     await this.resetForm();
@@ -151,12 +154,8 @@ export default {
         await this.signIn(this.formValues);
       }
     },
-    async focusElement(initial = false, el = "username") {
-      if (initial) {
-        await new Promise(resolve => setTimeout(resolve, 450));
-      } else {
-        await this.$nextTick();
-      }
+    async focusElement(el = "username") {
+      await new Promise(resolve => setTimeout(resolve, 450));
       this.$refs[el].focus();
     },
     fieldValidator() {
@@ -174,10 +173,10 @@ export default {
 }
 </script>
 <style lang="scss">
-.sign-in-container {
+.sign-up-container {
   display: grid;
   min-width: 100%;
-  .v-form.signin-form {
+  .v-form.signup-form {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: min-content;
@@ -191,7 +190,7 @@ export default {
   &:not(.mobile) {
     place-items: center;
     min-width: unset !important;
-    .v-form.signin-form {
+    .v-form.signup-form {
       grid-template-columns: minmax(385px, 25%) !important;
     }
   }

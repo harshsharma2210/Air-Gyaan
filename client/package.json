@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "serve-dev-ui": "vue-cli-service serve --mode dev-ui",
     "serve-dev-ui-mongo": "vue-cli-service serve --mode dev-ui-mongo",
+    "buildlocal": "vue-cli-service build  --mode buildlocal --modern",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
