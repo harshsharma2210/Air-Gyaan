@@ -24,7 +24,10 @@ import {
   mdiSearchWeb,
   mdiBellRing,
   mdiAccount,
-  mdiDotsVertical
+  mdiDotsVertical,
+  mdiFacebook,
+  mdiGoogle,
+  mdiLinkedin
 } from "@mdi/js";
 const icons = {
   iconfont: "mdiSvg",
@@ -56,7 +59,10 @@ const icons = {
     searchWeb: mdiSearchWeb,
     notifications: mdiBellRing,
     account: mdiAccount,
-    menuOptions: mdiDotsVertical
+    menuOptions: mdiDotsVertical,
+    facebook: mdiFacebook,
+    google: mdiGoogle,
+    linkedin: mdiLinkedin
   }
 };
 
