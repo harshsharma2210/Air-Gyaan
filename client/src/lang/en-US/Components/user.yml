@@ -1,19 +1,23 @@
 welcome: Welcome, {0}
 signout: Sign out
 signin:
-  title: Sign In to {0}
+  title: Sign In
+  card-title: Sign In to {0}
   username: Username or email address
   password: Password
   signin: Sign In
-  google: Google
-  facebook: Facebook
-  linkedin: LinkedIn
+  google: Sign In with Google
+  facebook: Sign In with Facebook
+  linkedin: Sign In with LinkedIn
 signup:
   title: Create your account
   subtitle: Join {0}
   username: Username or email address
   password: Password
-  repeat-password: Confirma password
+  repeat-password: Confirm password
   password-strength: Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.
-  signup: Sign up
+  signup: Sign Up
+  google: Sign Up with Google
+  facebook: Sign Up with Facebook
+  linkedin: Sign Up with LinkedIn
 
