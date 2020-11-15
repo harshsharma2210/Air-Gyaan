@@ -357,3 +357,83 @@ app.post(`${apiUriPath}${name}/add`, handleCreate);
 app.put(`${apiUriPath}${name}/update/:id`, handleUpdate);
 app.delete(`${apiUriPath}${name}/delete/:id`, handleDelete);
 ```
+
+# Router and SEO
+
+Instead of configuring the router and the component that will render it, it is necessary to separate the logic of the component itself from the logic of the router.
+
+In this way, a change in the component does not imply changes in the router, it is already configured.
+
+The router configures itself, that is, without more than including the javascript with its information in the `router` directory, it would be enough, the` router/index.js` script is already in charge of including that route in the router.
+
+The view components, which reside in the `views` directory, are only responsible for rendering the component with logic using the `render` function and are functional.
+
+For example, `views/SignInView.vue`:
+```html
+<script>
+import SignIn from "@/components/SignIn";
+export default {
+  name: 'sign-in-view',
+  functional: true,
+  render: h => h (SignIn)
+}
+</script>
+```
+
+To configure this page in the router, it would be enough to include its configuration in the `router` directory: it is recommended that the name of the javascript matches the name of the route to which it will respond:
+
+Continuing with the `views / SignInView.vue` example, your javascript will be called` sign-in.js` (since it will respond to the path `/sign-in`) and it will be included in the` router` directory:
+```javascript
+const SignInView = () =>
+  import (/* webpackChunkName: "sign-in-view" */ "@/views/SignInView");
+export default {
+  name: "sign-in",
+  path: "/sign-in",
+  component: SignInView,
+  meta: {
+    title: "Components.User.signin.title"
+  }
+}
+```
+
+To make the `router` not grow in size, the component is included with the logic in a dynamic way, so that the component itself (javascript + css styles) is not included, but will be resolved in runtime when going to your path (the @/views/SignInView component will be loaded from the server when the router goes to `sign-in` and will not be part of the javascript with the router).
+
+The comment /* webpackChunkName: "sign-in-view" */ is a hint for webpack, so that this component is included in a chunck whose name is the specified one.
+
+For new components, always apply the same logic for their name, which is `<path-name>-view`.
+
+To allow change window title on view transition, by default the app will lookup an entry on the router configuration of the actual route: `meta.title`.
+If found, then it will be used, remember that this title entry must point to lang entries, so it can be translated.
+
+Following with the example, you can see that its meta.title value is "Components.User.signin.title": so the app will find this entry via `this.$t()` function from `i18n`.
+
+If this entry is not configured on router file, then, the app will use ``
+
+You can see title and description funcionality on `AirGyaan.vue` file:
+```javascript
+    async changeSeo(to) {
+      if (to) {
+        const { meta } = to;
+        let title = meta && meta.title;
+        if (!title || title.length === 0) {
+          title = this.$t(`Views.${upperFirst(camelCase(to.name))}.title`);
+        }
+        document.title = [
+          this.$t(title),
+          this.$t("App.title")
+        ].join(" - ");
+        let description = meta && meta.description;
+        if (!description || description.length === 0) {
+          const descriptionKey = `Views.${upperFirst(camelCase(to.name))}.description`
+          if (this.$te(descriptionKey)) {
+            description = this.$t(descriptionKey);
+          }
+        }
+        if (description) {
+          document.querySelector('meta[name="description"]').setAttribute("content", description);
+        }
+      }
+    },
+```
+
+
