@@ -2,7 +2,6 @@
   <v-app :dark="$vuetify.theme.dark">
     <v-theme-provider root>
       <default-layout />
-      <default-layout />
     </v-theme-provider>
   </v-app>
 </template>
@@ -60,7 +59,13 @@ export default {
           this.$t(title),
           this.$t("App.title")
         ].join(" - ");
-        const description = meta && meta.description;
+        let description = meta && meta.description;
+        if (!description || description.length === 0) {
+          const descriptionKey = `Views.${upperFirst(camelCase(to.name))}.description`
+          if (this.$te(descriptionKey)) {
+            description = this.$t(descriptionKey);
+          }
+        }
         if (description) {
           document.querySelector('meta[name="description"]').setAttribute("content", description);
         }
