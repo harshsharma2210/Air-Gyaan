@@ -436,4 +436,42 @@ You can see title and description funcionality on `AirGyaan.vue` file:
     },
 ```
 
+# Serving DIST Local
 
+To serve a `build` a target is included on `package.json`. This target will simulate the client and server on remote
+servers (that is, producction environment), where `CORS` will be enabled.
+
+To simulate, we will start server module normally `npm start`, and just build the client side using `npm run buildlocal`.
+
+To start client and enable `CORS` we need to install `serve` module: `npm i -g serve`.
+
+Once `serve` is installed, run client using `serve -s dist` and open rul on browser.
+
+I have included `serve.json` on client module to enable `CORS`, so a call to `/api` will be routed to `http://localhost:3000`.
+
+You can see the new `VUE_APP_API_PROXY` variable in `.env.buildlocal` file, it will be used on `/utils/fetch/fetchRequestBuilder.js` when present,
+changing `baseUrl` and building `fetch request` to allow use `CORS`: `mode` and `credentials` are changed based on presence of `VUE_APP_API_PROXY`,
+see `fetchRequestBuilder` function at the end.
+
+To apply this behavior for a production build, just copy/paste `.env.buildlocal` to your own, for example `.env.buildpro`, add
+the entry for the target on `package.json` and change `VUE_APP_API_PROXY` to the real url.
+
+`.env.buildpro`:
+```
+NODE_ENV=production
+VUE_APP_SASS=sass
+VUE_APP_MOCK_UI_LOGIN=true
+VUE_APP_API_PROXY=https://www.realservername.com
+```
+
+and then, on `package.json`:
+
+```
+    "scripts": {
+        ...
+        "buildpro": "vue-cli-service build  --mode buildpro --modern",
+        ...
+    }
+```
+
+To build this new target, just run `npm run buildpro`.

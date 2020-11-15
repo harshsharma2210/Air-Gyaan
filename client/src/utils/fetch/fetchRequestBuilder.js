@@ -10,6 +10,11 @@ if (!baseUrl.startsWith("/")) {
 if (!baseUrl.endsWith("/")) {
   baseUrl += "/";
 }
+const apiProxy = process.env.VUE_APP_API_PROXY;
+console.info(`process.env.VUE_API_PROXY = ${apiProxy}`);
+if (apiProxy) {
+  baseUrl = `${apiProxy}${baseUrl}`;
+}
 
 const buildHeaders = async (headers = {}) => {
   return headers instanceof Headers ? headers : new Headers(headers);
@@ -151,9 +156,9 @@ const fetchRequestBuilder = async (url, options = {}) => {
     method: options.method || "GET",
     headers: headers,
     body: body,
-    mode: options.mode || "same-origin",
+    mode: options.mode || (apiProxy ? "cors" : "same-origin"),
     referrer: options.referrer,
-    credentials: options.credentials || "same-origin",
+    credentials: options.credentials || (apiProxy ? "cors" : "same-origin"),
     redirect: options.redirect || "follow",
     integrity: options.integrity,
     cache: options.cache || "default",
