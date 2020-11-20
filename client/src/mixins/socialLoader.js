@@ -1,6 +1,7 @@
 import socialInitializer from "@/mixins/socialInitializer";
 
 import { attachGoogleSignIn } from "@/utils/social/google";
+import { createLinkedInSignInUrl } from "@/utils/social/linkedin";
 
 export default {
   name: "socialLoader",
@@ -21,6 +22,10 @@ export default {
       } else {
         this.disabledGapi = true;
       }
+    },
+    async lapiEnabled() {
+      this.lurl = createLinkedInSignInUrl();
+      this.disabledLapi = false;
     }
   }
 }

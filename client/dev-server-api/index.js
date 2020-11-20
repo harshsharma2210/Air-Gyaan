@@ -1,9 +1,15 @@
 "use strict";
 
+const fetch = require("node-fetch");
+
 const { OAuth2Client } = require('google-auth-library');
 
 const googleClientId = process.env.VUE_APP_GOOGLE_CLIENT_ID;
 const googleClient = new OAuth2Client(googleClientId, process.env.VUE_APP_GOOGLE_CLIENT_SECRET);
+
+const linkedInClientId = process.env.VUE_APP_LINKEDIN_APP_ID;
+const linkedInSecretKey = process.env.VUE_APP_LINKEDIN_APP_SECRET;
+const linkedInCallbackUrl = process.env.VUE_APP_LINKEDIN_CALLBACK_URL;
 
 const configureUsers = require("./users");
 const configureEntityHandlers = require("./entity");
@@ -164,6 +170,69 @@ const handleSignInGoogle = async (req, res) => {
   }
 };
 
+const verifyLinkedInToken = async code => {
+  const body = new URLSearchParams();
+  body.append("grant_type", "authorization_code");
+  body.append("code", code);
+  body.append("redirect_uri", linkedInCallbackUrl);
+  body.append("client_id", linkedInClientId);
+  body.append("client_secret", linkedInSecretKey);
+  // https://github.com/node-fetch/node-fetch#post-with-form-parameters
+  const accessTokenResponse = await fetch("https://www.linkedin.com/oauth/v2/accessToken", {
+    method: "POST",
+    body
+  });
+  const { access_token: token } = await accessTokenResponse.json();
+  if (token) {
+    // https://docs.microsoft.com/en-us/linkedin/shared/integrations/people/primary-contact-api#retrieve-email-address
+    const options = {
+      headers: { "Accept": "application/json" },
+      method: "GET"
+    };
+    const emailResponse = await fetch(
+      `https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))&oauth2_access_token=${token}`,
+      options
+    );
+    const data = await emailResponse.json();
+    // https://docs.microsoft.com/en-us/linkedin/shared/integrations/people/primary-contact-api#sample-response
+    const { elements } = data;
+    if (elements && Array.isArray(elements) && elements.length > 0) {
+      let email;
+      for (let i = 0; i < elements.length; i++) {
+        if (elements[i]["handle~"]) {
+          email = elements[i]["handle~"].emailAddress;
+          if (email) {
+            if (users.has(email)) {
+              return email;
+            } else {
+              email = email.substring(0, email.lastIndexOf("@"));
+              if (users.has(email)) {
+                return email;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return null;
+}
+
+// https://docs.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin?context=linkedin/consumer/context
+const handleSignInLinkedIn = async (req, res) => {
+  const code = req.query.code;
+  const username = code && (await verifyLinkedInToken(code));
+  if (username && users.has(username)) {
+    const id = `id-${ids++}`;
+    cookies.set(id, {
+      id,
+      username
+    });
+    addCookie(res, id);
+  }
+  res.redirect(302, "/");
+};
+
 const handleSignOut = (req, res) => {
   deleteCookie(req, res);
   res.json(requiresSignInResponse());
@@ -199,6 +268,7 @@ const devServerApi = (app, server) => {
   app.get(`${apiPath}avatar/:username`, handleAvatar);
   app.post(`${apiPath}sign-in`, handleSignIn);
   app.post(`${apiPath}sign-in-google`, handleSignInGoogle);
+  app.get(`/auth/linkedin/callback`, handleSignInLinkedIn);
   app.post(`${apiPath}sign-out`, handleSignOut);
   // client entity routes
   configureEntityHandlers(app, apiPath);

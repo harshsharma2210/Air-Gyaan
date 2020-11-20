@@ -1,4 +1,5 @@
 import { loadGoogleSignIn } from "@/utils/social/google";
+import { loadLinkedInSignIn } from "@/utils/social/linkedin";
 
 export default {
   name: "socialInitializer",
@@ -14,7 +15,8 @@ export default {
     // used to enable the button
     disabledLapi: true,
     // used to control linkedin load
-    lapiEnabled: false
+    lapiEnabled: false,
+    lurl: null
   }),
   async mounted() {
     // dont use Promise.all => if one failed then all failed
@@ -24,10 +26,12 @@ export default {
     // 1: google
     // 2: facebook
     // 3: linkedin
-    const [gapi/*, fapi, lapi*/] = await Promise.allSettled([
-      loadGoogleSignIn()
+    const [gapi/*, fapi*/, lapi] = await Promise.allSettled([
+      loadGoogleSignIn(),
+      loadLinkedInSignIn()
     ]);
     this.gapiEnabled = gapi.status === "fulfilled";
+    this.lapiEnabled = lapi.status === "fulfilled";
   }
 
 }

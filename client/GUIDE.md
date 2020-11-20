@@ -544,6 +544,16 @@ We need to install `google-auth-library` as a dev dependency on client module: `
 
 Once installed, just start client module: `npm run serve-dev-ui` 
 
+## LinkedIn
+
+We need to install `node-fetch` as a dev dependency on client module: `npm i --save-dev node-fetch`.
+
+We need to add `http:localhost:8080/auth/linkedin/callback` to allow default port to `LinkedIn` admin console.
+If not added, then we need to start client module on port 3000.
+When added, just remove `PORT=3000` on `.env` client module file. 
+
+Once installed and configured, just start client module: `npm run serve-dev-ui` .
+
 ## Server module
 
 We are required to include logic similar to described on abstract entry, so we will need to

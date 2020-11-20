@@ -72,6 +72,7 @@
             class="ma-2 px-4"
             :loading="busy"
             :disabled="disabledLapi"
+            :href="lurl"
         >
           <v-icon left>$vuetify.icons.linkedin</v-icon>
           {{ $t("Components.User.signin.linkedin") }}
