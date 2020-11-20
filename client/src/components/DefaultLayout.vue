@@ -161,10 +161,12 @@
 </template>
 <script>
 //todo@userquin: mock login until clarified
+
 const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
 
 import apiFetch from "@/mixins/apiFetch";
 
+import socialInitializer from "@/mixins/socialInitializer";
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
 
@@ -174,7 +176,7 @@ import Errors from "@/components/Errors";
 
 export default {
   name: "default-layout",
-  mixins: [apiFetch],
+  mixins: [socialInitializer, apiFetch],
   components: { Errors, AppNavigation, AppPost },
   data: () => ({
     available: languages,

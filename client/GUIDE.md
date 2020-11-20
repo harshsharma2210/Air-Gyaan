@@ -492,11 +492,11 @@ Once the server receives the verification response, it will check if user is reg
 is sign-in or not: similar to `username/password` sign-in but getting data from social server.
 
 To handle the logic on the client, I have included the logic to social sign-in on `DefaultLayout` component.
-There are also utilities on `socialHandler` mixin, that is included on `SignIn` component. This mixin must be modified
+There are also utilities on `socialLoader` mixin, that is included on `SignIn` component. This mixin must be modified
 to include `facebook` and `linkedin` sign-in.
 
 The `SignIn` component is responsible of loading `javascript` using utilities on `@/utils/social` directory, registering
-the callbacks for sign-in logic: you only need to modify `socialHandler` mixin.
+the callbacks for sign-in logic: you only need to modify `socialLoader` mixin.
 
 Each social sign-in must be included in separated files, keeping logic in its own scope: prefix all methods with the 
 corresponding social name, for example, for google, all methods will be prefixed with `google`.
@@ -524,18 +524,18 @@ To include another social sing-in module:
 2) Add sign-in callbacks to `@/components/DefaultLayout.vue`: these callbacks will be called once sign-in logic called.
 3) Modify `@/components/DefaultLayout.vue` to provide sign-in callbacks from the previous step: just modifiy `provide()` 
 function adding all them to the object.
-4) Modify `@/mixins/socialHandler.js` mixin to inject sign-in callbacks from step 2: just modify `inject`
+4) Modify `@/mixins/socialLoader.js` mixin to inject sign-in callbacks from step 2: just modify `inject`
 property including all them.
-5) Include logic call included in step 1 on `@/mixins/socialHandler.js` **mounted** method: beware of the order, just add
+5) Include logic call included in step 1 on `@/mixins/socialInicializer.js` **mounted** method: beware of the order, just add
 to the end and uncomment it from the array const.
-6) Add corresponding `watch` entry on `@/mixins/socialHandler.js`.
+6) Add corresponding `watch` entry on `@/mixins/socialLoader.js`: this will install the listener (if necessary).
 7) Add logic to sign-in callbacks on `@/components/DefaultLayout.vue`: see `googleSignInSuccess` and `googleSignInFailure`.
 8) Add dev dependency to verify on server side: like `npm i --save-dev google-auth-library`.
 9) Add mapping to `dev-server-api/index.js` file: see 
     ```javascript
     app.post(`${apiPath}sign-in-google`, handleSignInGoogle);
     ```
-10) Add logic to call social server.
+10) Add logic to call social server: see `handleSignInGoogle` on `dev-server-api/index.js`.
 
 ## Google
 
