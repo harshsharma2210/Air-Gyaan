@@ -5,6 +5,7 @@
           color="primary"
           dense
       >
+        <air-gyaan-icon />
         <v-toolbar-title>{{ $t("App.title") }}</v-toolbar-title>
         <v-spacer />
         <div key="welcome" v-show="loggedIn && !smallButtons" class="separate-user">{{ welcome }}</div>
@@ -162,6 +163,7 @@
 <script>
 //todo@userquin: mock login until clarified
 
+import AirGyaanIcon from "@/components/AirGyaanIcon";
 const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
 
 import apiFetch from "@/mixins/apiFetch";
@@ -177,7 +179,7 @@ import Errors from "@/components/Errors";
 export default {
   name: "default-layout",
   mixins: [socialInitializer, apiFetch],
-  components: { Errors, AppNavigation, AppPost },
+  components: { AirGyaanIcon, Errors, AppNavigation, AppPost },
   data: () => ({
     available: languages,
     showAddPost: false,
