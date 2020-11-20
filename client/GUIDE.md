@@ -483,7 +483,7 @@ To build this new target, just run `npm run buildpro`.
 
 This will cover the sign-in with social: `google`, `facebook` and `linkedin`.
 
-At moment redacting this document, only `google` is included and working.
+At moment redacting this document, only `google` and `linkedin` is included and working.
 
 ## Abstract
 
