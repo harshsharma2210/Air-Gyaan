@@ -96,10 +96,41 @@
           </v-menu>
         </div>
         <div key="normal" v-else class="separate-bar">
-          <v-btn icon :title="darkLightText" @click="switchDarkLightMode"><v-icon>{{ darkLightIcon }}</v-icon></v-btn>
-          <v-btn v-show="loggedIn"  key="signout" icon :title="$t('Components.User.signout')" @click="signOut"><v-icon>$vuetify.icons.signout</v-icon></v-btn>
-          <v-btn v-show="!loggedIn" key="signin" icon :title="$t('Components.User.signin.signin')" @click.native.prevent="$router.push({ name: 'sign-in' })"><v-icon>$vuetify.icons.signin</v-icon></v-btn>
-          <v-btn v-show="!loggedIn" key="signup" icon :title="$t('Components.User.signup.signup')" @click.native.prevent="$router.push({ name: 'sign-up' })"><v-icon>$vuetify.icons.signup</v-icon></v-btn>
+          <v-btn
+              icon
+              :title="darkLightText"
+              @click="switchDarkLightMode"
+          >
+            <v-icon>{{ darkLightIcon }}</v-icon>
+          </v-btn>
+          <v-btn
+              v-show="loggedIn"
+              key="signout"
+              icon
+              :title="$t('Components.User.signout')"
+              @click="signOut"
+          >
+            <v-icon>$vuetify.icons.signout</v-icon>
+          </v-btn>
+          <v-btn
+              v-show="!loggedIn"
+              key="signin"
+              :disabled="disableSignIn"
+              icon
+              :title="$t('Components.User.signin.signin')"
+              @click.native.prevent="$router.push({ name: 'sign-in' })"
+          >
+            <v-icon>$vuetify.icons.signin</v-icon>
+          </v-btn>
+          <v-btn
+              v-show="!loggedIn"
+              key="signup"
+              icon
+              :title="$t('Components.User.signup.signup')"
+              @click.native.prevent="$router.push({ name: 'sign-up' })"
+          >
+            <v-icon>$vuetify.icons.signup</v-icon>
+          </v-btn>
         </div>
       </v-app-bar>
 
@@ -119,32 +150,46 @@
             @add-post="addPost"
         />
       </v-dialog>
+      <v-dialog
+          v-model="showErrorDialog"
+          max-width="500px"
+          scrollable
+      >
+        <errors v-if="showErrorDialog" :title="errorTitle" :errors="errorMessages" />
+      </v-dialog>
   </v-app>
 </template>
 <script>
 //todo@userquin: mock login until clarified
 const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
 
+import apiFetch from "@/mixins/apiFetch";
+
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
 
 import AppPost from "@/components/AppPost";
 import AppNavigation from "@/components/AppNavigation";
-import apiFetch from "@/mixins/apiFetch";
+import Errors from "@/components/Errors";
 
 export default {
   name: "default-layout",
   mixins: [apiFetch],
-  components: { AppNavigation, AppPost },
+  components: { Errors, AppNavigation, AppPost },
   data: () => ({
     available: languages,
     showAddPost: false,
+    showErrorDialog: false,
+    errorTitle: null,
+    errorMessages: [],
     showSignUp: false
   }),
   provide() {
     return {
       signIn: this.signIn,
-      signup: this.signUp
+      googleSignInSuccess: this.googleSignInSuccess,
+      googleSignInFailure: this.googleSignInFailure,
+      signUp: this.signUp
     }
   },
   async beforeMount() {
@@ -166,6 +211,9 @@ export default {
     },
     smallButtons() {
       return this.$vuetify.breakpoint.xs;
+    },
+    disableSignIn() {
+      return this.$route && this.$route.name === "sign-in";
     }
   },
   watch: {
@@ -227,6 +275,40 @@ export default {
       } catch (e) {
         //todo: handle error
         await this.configureBusy(false);
+      }
+    },
+    async googleSignInSuccess(googleUser) {
+      await this.configureBusy(true);
+      try {
+        // todo@userquin => handle not sign-in => auto sign-up?
+        const data = await this.requestSignInGoogle(googleUser.getAuthResponse());
+        await this.processLogin(data);
+        await this.configureBusy(false);
+        await this.$nextTick();
+      } catch (e) {
+        //todo: handle error
+        await this.configureBusy(false);
+      }
+    },
+    async googleSignInFailure(error) {
+      // https://developers.google.com/identity/sign-in/web/reference#error_codes_2
+      let message = null;
+      if (error) {
+        if (error.error !== "popup_closed_by_user") {
+          console.error("google sign-in failure", error);
+          if (error.error !== "access_denied") {
+            message = "other";
+          } else {
+            message = "access_denied";
+          }
+        }
+      } else {
+        message = "other";
+      }
+      if (message) {
+        this.errorTitle = "Errors.title";
+        this.errorMessages.splice(0, this.errorMessages.length, `Errors.google.${message}`);
+        setTimeout(() => (this.showErrorDialog = true), 0);
       }
     }
   }

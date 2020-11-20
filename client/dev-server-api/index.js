@@ -1,5 +1,10 @@
 "use strict";
 
+const { OAuth2Client } = require('google-auth-library');
+
+const googleClientId = process.env.VUE_APP_GOOGLE_CLIENT_ID;
+const googleClient = new OAuth2Client(googleClientId, process.env.VUE_APP_GOOGLE_CLIENT_SECRET);
+
 const configureUsers = require("./users");
 const configureEntityHandlers = require("./entity");
 
@@ -44,7 +49,8 @@ const addCookie = (res, id) => {
   res.cookie("AIRGYAAN", id, {
     path: publicPath,
     secure: process.env.HTTPS === true,
-    httpOnly: true
+    httpOnly: true,
+    SameSite: "Lax"
   });
 };
 
@@ -115,6 +121,49 @@ const handleSignIn = (req, res) => {
   }
 };
 
+const verifyGoogleToken = async idToken => {
+  const ticket = await googleClient.verifyIdToken({
+    idToken,
+    audience: googleClientId
+  });
+  return ticket.getPayload();
+}
+
+// https://developers.google.com/identity/sign-in/web/backend-auth
+const handleSignInGoogle = async (req, res) => {
+  const { token } = req.body;
+  const googleInfo = token && (await verifyGoogleToken(token));
+  let signedIn = false;
+  if (googleInfo) {
+    let username = googleInfo.email;
+    if (username) {
+      let id;
+      let userData;
+      if (users.has(username)) {
+        id = `id-${ids++}`;
+        userData = users.get(username);
+      } else {
+        username = username.substring(0, username.lastIndexOf("@"));
+        if (users.has(username)) {
+          id = `id-${ids++}`;
+          userData = users.get(username);
+        }
+      }
+      if (id) {
+        signedIn = true;
+        cookies.set(id, {
+          id,
+          username
+        });
+        sendUserInfo(res, id, userData);
+      }
+    }
+  }
+  if (!signedIn) {
+    res.json(requiresSignInResponse());
+  }
+};
+
 const handleSignOut = (req, res) => {
   deleteCookie(req, res);
   res.json(requiresSignInResponse());
@@ -149,6 +198,7 @@ const devServerApi = (app, server) => {
   app.get(`${apiPath}check-context`, handleCheckContext);
   app.get(`${apiPath}avatar/:username`, handleAvatar);
   app.post(`${apiPath}sign-in`, handleSignIn);
+  app.post(`${apiPath}sign-in-google`, handleSignInGoogle);
   app.post(`${apiPath}sign-out`, handleSignOut);
   // client entity routes
   configureEntityHandlers(app, apiPath);

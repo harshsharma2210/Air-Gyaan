@@ -49,7 +49,7 @@
             small
             class="ma-2 px-4"
             :loading="busy"
-            @click.native.prevent="fireSubmit"
+            :disabled="disabledGapi"
         >
           <v-icon left>$vuetify.icons.google</v-icon>
           {{ $t("Components.User.signin.google") }}
@@ -60,7 +60,7 @@
             small
             class="ma-2 px-4"
             :loading="busy"
-            @click.native.prevent="fireSubmit"
+            :disabled="disabledFapi"
         >
           <v-icon left>$vuetify.icons.facebook</v-icon>
           {{ $t("Components.User.signin.facebook") }}
@@ -71,7 +71,7 @@
             small
             class="ma-2 px-4"
             :loading="busy"
-            @click.native.prevent="fireSubmit"
+            :disabled="disabledLapi"
         >
           <v-icon left>$vuetify.icons.linkedin</v-icon>
           {{ $t("Components.User.signin.linkedin") }}
@@ -82,15 +82,18 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import socialLoader from "@/mixins/socialLoader";
 
 export default {
   name: "sign-in",
+  mixins: [socialLoader],
   inject: {
     signIn: {
       default: null
     }
   },
   data: () => ({
+    activateValidation: false,
     form: {
       username: null,
       password: null
