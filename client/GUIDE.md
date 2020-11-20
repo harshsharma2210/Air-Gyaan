@@ -479,6 +479,8 @@ To build this new target, just run `npm run buildpro`.
 
 # Social Sign-In
 
+**IMPORTANT**: YOU NEED TO DO `npm install` ON CLIENT MODULE BEFORE STARTING IT.
+
 This will cover the sign-in with social: `google`, `facebook` and `linkedin`.
 
 At moment redacting this document, only `google` is included and working.
