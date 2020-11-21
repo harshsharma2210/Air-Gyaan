@@ -1,43 +1,27 @@
 import Vue from "vue";
 import Router from "vue-router";
 import HomeView from "@/views/HomeView";
-import { routeMiddleware } from "@/i18n";
 
-const COUNTRY_AND_LANG = process.env.VUE_APP_COUNTRY_AND_LANG || "en-US";
+Vue.use(Router);
 
-// this will only load top level routes
 const requireRoutes = require.context("./", false, /\.js$/);
 
-const LangView = {
-    render(h) {
-       return h("router-view")
-    }
-}
-
-const langRoute = {
-    path: "/:lang",
-    component: LangView,
-    beforeEnter: routeMiddleware,
-    children: [
-        {
-            path: "",
-            name: "home",
-            component: HomeView
-        }
-    ]
-}
+const routes = [{
+    path: "",
+    name: "home",
+    component: HomeView
+}];
 
 const verify = process.env.NODE_ENV !== "production";
 let entry;
+// this will only load top level routes
 if (verify) {
     const routeMap = new Map();
     for (const file of requireRoutes.keys()) {
         if (file === "./index.js") {
             continue;
         }
-        if (verify) {
-            console.info(`Router-Index: ${file}`);
-        }
+        console.info(`Router-Index: ${file}`);
         entry = requireRoutes(file).default;
         if (Array.isArray(entry)) {
             entry.forEach(e => {
@@ -62,7 +46,7 @@ if (verify) {
             } else {
                 routeMap.set(entry.name, entry.path);
             }
-            langRoute.children.push(entry);
+            routes.push(entry);
         }
     }
     routeMap.clear();
@@ -73,26 +57,12 @@ if (verify) {
         }
         entry = requireRoutes(file).default;
         if (Array.isArray(entry)) {
-            langRoute.children.push(...entry);
+            routes.push(...entry);
         } else {
-            langRoute.children.push(entry);
+            routes.push(entry);
         }
     }
 }
-
-const routes = [
-    langRoute, {
-        // Redirect user to supported lang version.
-        path: '*',
-        // eslint-disable-next-line no-unused-vars
-        redirect (to) {
-            return `/${COUNTRY_AND_LANG}/`;
-        }
-    }
-];
-
-
-Vue.use(Router);
 
 export default new Router({
     mode: "history",

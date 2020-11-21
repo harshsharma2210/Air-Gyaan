@@ -1,7 +1,10 @@
 const NotificacionsView = () =>
-  import(/* webpackChunkName: "me-view" */ "@/views/NotificacionsView");
+  import(/* webpackChunkName: "notifications-view" */ "@/views/NotificacionsView");
 export default {
   name: "notifications",
   path: "/notifications",
-  component: NotificacionsView
+  component: NotificacionsView,
+  meta: {
+    requiresAuth: true
+  }
 }

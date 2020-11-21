@@ -161,7 +161,11 @@ export default {
       } else {
         await this.$nextTick();
       }
-      this.$refs[el].focus();
+      try {
+        this.$refs[el].focus();
+      } catch (_) {
+        // just ignore
+      }
     },
     fieldValidator() {
       const vm = this;

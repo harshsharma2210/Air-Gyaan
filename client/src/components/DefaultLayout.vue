@@ -119,16 +119,17 @@
               :disabled="disableSignIn"
               icon
               :title="$t('Components.User.signin.signin')"
-              @click.native.prevent="$router.push({ name: 'sign-in' })"
+              @click.native.prevent="$router.push({ path: '/sign-in' })"
           >
             <v-icon>$vuetify.icons.signin</v-icon>
           </v-btn>
           <v-btn
               v-show="!loggedIn"
               key="signup"
+              :disabled="disableSignUp"
               icon
               :title="$t('Components.User.signup.signup')"
-              @click.native.prevent="$router.push({ name: 'sign-up' })"
+              @click.native.prevent="$router.push({ path: '/sign-up' })"
           >
             <v-icon>$vuetify.icons.signup</v-icon>
           </v-btn>
@@ -136,9 +137,9 @@
       </v-app-bar>
 
       <v-main>
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"/>
       </v-main>
-      <app-navigation @show-add-post="showAddPost = true"></app-navigation>
+      <app-navigation @show-add-post="showAddPost = true" />
       <v-dialog
           v-model="showAddPost"
           max-width="500px"
@@ -199,6 +200,19 @@ export default {
   async beforeMount() {
     this.$router.afterEach(this.changeSeo);
   },
+  async created() {
+    this.watcher = this.$watch(
+        vm => [vm.loggedIn, vm.$route].join(),
+        async () => {
+          await this.handleLoggedIn();
+        },
+        { immediate:  true }
+    );
+  },
+  beforeDestroy() {
+    this.watcher && this.watcher();
+    this.watcher = null;
+  },
   computed: {
     ...mapState(["loggedIn", "userName", "userAvatar"]),
     welcome() {
@@ -218,17 +232,39 @@ export default {
     },
     disableSignIn() {
       return this.$route && this.$route.name === "sign-in";
+    },
+    disableSignUp() {
+      return this.$route && this.$route.name === "sign-up";
     }
   },
+/*
   watch: {
-    async loggedIn() {
-      if (!!this.$route || this.$route.name !== "home") {
-        await this.$router.push({ name: "home"});
-      }
+    async loggedIn(value) {
+      this.handleLoggedIn(value);
+      // if (!this.$route || this.$route.path !== "/") {
+      //   await this.$router.push({ path: "/"});
+      // }
     }
   },
+*/
   methods: {
     ...mapActions(["configureBusy"]),
+    async handleLoggedIn() {
+      console.info(this.$route);
+      console.info(this.loggedIn);
+      if (this.$route) {
+        if (this.loggedIn === false || this.loggedIn === null) {
+          const requiresAuth = this.$route.meta && this.$route.meta.requiresAuth === true;
+          console.info(requiresAuth);
+          // handle enter url directly or refresh: F5
+          if (requiresAuth && this.$route.path !== "/" && this.$route.path !== "/sign-in") {
+            await this.$router.push({ path: "/sign-in"});
+          }
+        }
+      } else {
+        await this.$router.push({ path: "/"});
+      }
+    },
     async changeLocale(locale) {
       await changeLanguage(locale);
     },

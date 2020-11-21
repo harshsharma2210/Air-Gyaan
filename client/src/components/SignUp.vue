@@ -156,7 +156,11 @@ export default {
     },
     async focusElement(el = "username") {
       await new Promise(resolve => setTimeout(resolve, 450));
-      this.$refs[el].focus();
+      try {
+        this.$refs[el].focus();
+      } catch (_) {
+        // just ignore
+      }
     },
     fieldValidator() {
       const vm = this;
