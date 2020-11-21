@@ -351,8 +351,9 @@ export default {
           } else {
             message = "access_denied";
           }
-        } else {
-          message = "other";
+        // uncomment following 2 lines for testing purposes
+        // } else {
+        //   message = "other";
         }
       } else {
         message = "other";
