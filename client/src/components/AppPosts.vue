@@ -8,10 +8,10 @@
       <template #noMore>
         <div class="text-centered">{{ $t("Components.Post.posts.no-more") }}</div>
       </template>
-      <template #error>
-        <div class="post-error">
+      <template #error="{ trigger }">
+        <div class="post-error mt-2">
           <div>{{ $t("Components.Post.posts.error") }}</div>
-          <v-btn small outlined color="error">{{ $t("Components.Post.posts.retry") }}</v-btn>
+          <v-btn small outlined color="error" @click="trigger">{{ $t("Components.Post.posts.retry") }}</v-btn>
         </div>
       </template>
     </infinite-loading>
@@ -71,7 +71,6 @@ export default {
     display: block;
     text-align: center;
     .v-btn, div {
-      margin-top: 8px;
       font-weight: 700;
       color: var(--v-error-base);
       caret-color: var(--v-error-base);
@@ -80,7 +79,6 @@ export default {
   .text-centered {
     display: block;
     text-align: center;
-    margin: 8px 0;
     font-weight: 700;
   }
 }
