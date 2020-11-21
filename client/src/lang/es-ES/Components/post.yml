@@ -6,3 +6,8 @@ form:
   subtitle: Subtítulo
   body: Contenido
 post: Publicar
+posts:
+  no-results: No se encontraron publicaciones
+  no-more: No se encontraron más publicaciones
+  retry: Reintentar
+  error: Upps, algo ha ido mal :(

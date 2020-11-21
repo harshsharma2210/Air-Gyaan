@@ -50,9 +50,8 @@ export default {
         await fetch(request);
       } catch (e) {
         // just ignore
-      } finally {
-        this.$nextTick(() => this.processLogin({ autheticated: false }));
       }
+      this.$nextTick(() => this.processLogin({ autheticated: false }));
     },
     async apiGet(url, options = {}) {
       options.method = "GET";

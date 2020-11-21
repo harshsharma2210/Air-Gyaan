@@ -2,9 +2,18 @@
   <div :class="['posts-container', { mobile: $vuetify.breakpoint.mobile }]">
     <app-post-entry v-for="(post, idx) in posts" :key="`${idx}-${post._id}`" :post="post" />
     <infinite-loading @infinite="loadPosts" :distance="postsSize">
-<!--      <template #noResults></template>-->
-<!--      <template #noMore></template>-->
-<!--      <template #error></template>-->
+      <template #noResults>
+        <div class="text-centered">{{ $t("Components.Post.posts.no-results") }}</div>
+      </template>
+      <template #noMore>
+        <div class="text-centered">{{ $t("Components.Post.posts.no-more") }}</div>
+      </template>
+      <template #error>
+        <div class="post-error">
+          <div>{{ $t("Components.Post.posts.error") }}</div>
+          <v-btn small outlined color="error">{{ $t("Components.Post.posts.retry") }}</v-btn>
+        </div>
+      </template>
     </infinite-loading>
   </div>
 </template>
@@ -57,6 +66,22 @@ export default {
   grid-row-gap: 16px;
   &.mobile {
     grid-row-gap: 8px;
+  }
+  .post-error {
+    display: block;
+    text-align: center;
+    .v-btn, div {
+      margin-top: 8px;
+      font-weight: 700;
+      color: var(--v-error-base);
+      caret-color: var(--v-error-base);
+    }
+  }
+  .text-centered {
+    display: block;
+    text-align: center;
+    margin: 8px 0;
+    font-weight: 700;
   }
 }
 </style>
