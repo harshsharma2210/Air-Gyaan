@@ -139,7 +139,7 @@
       <v-main>
         <router-view :key="$route.fullPath"/>
       </v-main>
-      <app-navigation @show-add-post="showAddPost = true" />
+      <app-navigation @show-add-post="showAddPost = true" :initialized="initialized" />
       <v-dialog
           v-model="showAddPost"
           max-width="500px"
@@ -187,7 +187,8 @@ export default {
     showErrorDialog: false,
     errorTitle: null,
     errorMessages: [],
-    showSignUp: false
+    showSignUp: false,
+    initialized: false
   }),
   provide() {
     return {
@@ -199,6 +200,9 @@ export default {
   },
   async beforeMount() {
     this.$router.afterEach(this.changeSeo);
+  },
+  mounted() {
+    Promise.resolve().then(() => setTimeout(() => (this.initialized = true), 256));
   },
   async created() {
     this.watcher = this.$watch(
@@ -250,8 +254,6 @@ export default {
   methods: {
     ...mapActions(["configureBusy"]),
     async handleLoggedIn() {
-      console.info(this.$route);
-      console.info(this.loggedIn);
       if (this.$route) {
         if (this.loggedIn === false || this.loggedIn === null) {
           const requiresAuth = this.$route.meta && this.$route.meta.requiresAuth === true;

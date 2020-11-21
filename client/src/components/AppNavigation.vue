@@ -46,6 +46,12 @@ import detectPassiveEvents from "@/utils/detectPassiveEvents";
 
 export default {
   name: "app-navigation",
+  props: {
+    initialized: {
+      type: Boolean,
+      required: true
+    }
+  },
   data: () => ({
     addFloating: false,
     value: undefined
@@ -59,7 +65,7 @@ export default {
   watch: {
     value: {
       async handler(newVal, oldVal) {
-        if (newVal && oldVal !== undefined) {
+        if (this.initialized && newVal && oldVal !== undefined) {
           await this.navigateTo(newVal);
         }
       },
