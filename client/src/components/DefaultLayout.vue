@@ -257,10 +257,13 @@ export default {
       if (this.$route) {
         if (this.loggedIn === false || this.loggedIn === null) {
           const requiresAuth = this.$route.meta && this.$route.meta.requiresAuth === true;
-          console.info(requiresAuth);
           // handle enter url directly or refresh: F5
           if (requiresAuth && this.$route.path !== "/" && this.$route.path !== "/sign-in") {
             await this.$router.push({ path: "/sign-in"});
+          }
+        } else {
+          if (this.$route.path === "/sign-in" || this.$route.path !== "/sign-up") {
+            await this.$router.push({ path: "/"});
           }
         }
       } else {
