@@ -157,7 +157,12 @@
           max-width="500px"
           scrollable
       >
-        <errors v-if="showErrorDialog" :title="errorTitle" :errors="errorMessages" />
+        <errors
+            v-if="showErrorDialog"
+            :title="errorTitle"
+            :errors="errorMessages"
+            @cancel-errors="showErrorDialog = false"
+        />
       </v-dialog>
   </v-app>
 </template>
@@ -346,6 +351,8 @@ export default {
           } else {
             message = "access_denied";
           }
+        } else {
+          message = "other";
         }
       } else {
         message = "other";

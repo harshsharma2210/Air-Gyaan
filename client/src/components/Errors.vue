@@ -1,8 +1,15 @@
 <template>
   <v-card>
-    <v-card-title>{{ title }}</v-card-title>
+    <v-card-title>{{ $t(title) }}</v-card-title>
     <v-card-text>
-
+      <ul class="errors" role="presentation">
+        <li v-for="(error, i) in errors" :key="i">
+          <span aria-hidden="true">
+            <v-icon color="error">$vuetify.icons.error</v-icon>
+          </span>
+          <span class="message-error">{{ $t(error) }}</span>
+        </li>
+      </ul>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
