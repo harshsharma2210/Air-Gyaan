@@ -91,15 +91,3 @@ export const initializeLanguage = () => {
   });
 };
 
-export const routeMiddleware = (to, from, next) => {
-  // Load async message files here
-  const lang = to.params.lang
-  if (!lang || locales.indexOf(lang) === -1) {
-    return next(`/${COUNTRY_AND_LANG}`)
-  }
-  if (loadedLanguages.indexOf(lang) > -1) {
-    return next();
-  }
-  return changeLanguage(lang).then(() => next())
-}
-

@@ -4,7 +4,7 @@
       <v-card-title class="justify-center">{{ title }}</v-card-title>
       <v-card-subtitle class="text-center">{{ subtitle }}</v-card-subtitle>
       <v-card-text>
-        <v-form class="signup-form pt-4" @submit.prevent="fireSubmit" lazy-validation>
+        <v-form v-model="valid" ref="form" class="signup-form pt-4" @submit.prevent="fireSubmit" lazy-validation>
           <v-text-field
               ref="username"
               v-model="form.username"
@@ -91,6 +91,7 @@ export default {
     }
   },
   data: () => ({
+    valid: true,
     form: {
       username: null,
       password: null
@@ -130,6 +131,25 @@ export default {
       }
     }
   },
+  watch: {
+    "$i18n.locale": {
+      async handler() {
+        setTimeout(async () => {
+          const form = this.$refs && this.$refs.form;
+          if (form) {
+            const wasInvalid = this.valid !== true;
+            form.resetValidation();
+            if (wasInvalid) {
+              await new Promise(resolve => setTimeout(resolve, 256));
+              await form.validate();
+            }
+            await this.focusElement("username", 0);
+          }
+        }, 0);
+      },
+      immediate: true
+    }
+  },
   mounted() {
     this.focusElement();
   },
@@ -154,9 +174,13 @@ export default {
         await this.signIn(this.formValues);
       }
     },
-    async focusElement(el = "username") {
-      await new Promise(resolve => setTimeout(resolve, 450));
-      this.$refs[el].focus();
+    async focusElement(el = "username", timeout = 450) {
+      await new Promise(resolve => setTimeout(resolve, timeout));
+      try {
+        this.$refs[el].focus();
+      } catch (_) {
+        // just ignore
+      }
     },
     fieldValidator() {
       const vm = this;

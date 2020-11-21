@@ -32,6 +32,16 @@ export default {
       const response = await fetch(request);
       return await response.json();
     },
+    async requestSignInGoogle({ id_token }) {
+      const request = await fetchRequestBuilder("sign-in-google", {
+        method: "POST",
+        body: {
+          token: id_token
+        }
+      });
+      const response = await fetch(request);
+      return await response.json();
+    },
     async requestSignOut() {
       try {
         const request = await fetchRequestBuilder("sign-out", {

@@ -1,7 +1,7 @@
 $color-pack: false;
 
 .v-application {
-  a {
+  a:not(.v-btn) {
     color: var(--v-accent-base) !important;
   }
   &.theme--dark {
@@ -30,5 +30,20 @@ $color-pack: false;
 main.v-main .v-main__wrap {
   padding: 16px;
 }
+
+ul.errors {
+  list-style-type: none;
+  padding: 0 !important;
+  margin: 0 !important;
+  li {
+    //padding: 0 0 8px 16px;
+    display: grid;
+    grid-template-columns: min-content auto auto;
+    //grid-template-columns: min-content auto min-content;
+    grid-column-gap: 8px;
+    align-items: center;
+  }
+}
+
 
 @import '~vuetify/src/styles/main.sass';

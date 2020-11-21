@@ -1,0 +1,4 @@
+title: Error
+google:
+  access_denied: Sorry, but Google is denying access.
+  other: Sorry, but Google is responding with an indeterminate error processing the request.

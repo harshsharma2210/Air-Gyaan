@@ -3,5 +3,8 @@ const MeView = () =>
 export default {
   name: "me",
   path: "/me",
-  component: MeView
+  component: MeView,
+  meta: {
+    requiresAuth: true
+  }
 }

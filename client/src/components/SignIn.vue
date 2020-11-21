@@ -3,7 +3,7 @@
     <v-card class="elevation-0 border-0">
       <v-card-title class="justify-center">{{ title }}</v-card-title>
       <v-card-text>
-        <v-form ref="form" class="signin-form pt-4" @submit.prevent="fireSubmit"  lazy-validation>
+        <v-form v-model="valid" ref="form" class="signin-form pt-4" @submit.prevent="fireSubmit"  lazy-validation>
           <v-text-field
               ref="username"
               v-model="form.username"
@@ -49,7 +49,7 @@
             small
             class="ma-2 px-4"
             :loading="busy"
-            @click.native.prevent="fireSubmit"
+            :disabled="disabledGapi"
         >
           <v-icon left>$vuetify.icons.google</v-icon>
           {{ $t("Components.User.signin.google") }}
@@ -60,7 +60,7 @@
             small
             class="ma-2 px-4"
             :loading="busy"
-            @click.native.prevent="fireSubmit"
+            :disabled="disabledFapi"
         >
           <v-icon left>$vuetify.icons.facebook</v-icon>
           {{ $t("Components.User.signin.facebook") }}
@@ -71,7 +71,8 @@
             small
             class="ma-2 px-4"
             :loading="busy"
-            @click.native.prevent="fireSubmit"
+            :disabled="disabledLapi"
+            :href="lurl"
         >
           <v-icon left>$vuetify.icons.linkedin</v-icon>
           {{ $t("Components.User.signin.linkedin") }}
@@ -82,15 +83,19 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import socialLoader from "@/mixins/socialLoader";
 
 export default {
   name: "sign-in",
+  mixins: [socialLoader],
   inject: {
     signIn: {
       default: null
     }
   },
   data: () => ({
+    valid: true,
+    activateValidation: false,
     form: {
       username: null,
       password: null
@@ -127,6 +132,25 @@ export default {
       }
     }
   },
+  watch: {
+    "$i18n.locale": {
+      async handler() {
+        setTimeout(async () => {
+          const form = this.$refs && this.$refs.form;
+          if (form) {
+            const wasInvalid = this.valid !== true;
+            form.resetValidation();
+            if (wasInvalid) {
+              await new Promise(resolve => setTimeout(resolve, 256));
+              await form.validate();
+            }
+            await this.focusElement(true, "username", 0);
+          }
+        }, 0);
+      },
+      immediate: true
+    }
+  },
   mounted() {
     this.focusElement(true);
   },
@@ -151,13 +175,17 @@ export default {
         await this.signIn(this.formValues);
       }
     },
-    async focusElement(initial = false, el = "username") {
+    async focusElement(initial = false, el = "username", timeout = 450) {
       if (initial) {
-        await new Promise(resolve => setTimeout(resolve, 450));
+        await new Promise(resolve => setTimeout(resolve, timeout));
       } else {
         await this.$nextTick();
       }
-      this.$refs[el].focus();
+      try {
+        this.$refs[el].focus();
+      } catch (_) {
+        // just ignore
+      }
     },
     fieldValidator() {
       const vm = this;

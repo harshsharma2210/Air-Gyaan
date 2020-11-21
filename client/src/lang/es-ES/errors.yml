@@ -1,0 +1,4 @@
+title: Error
+google:
+  access_denied: Lo sentimos, pero Google está denegando el acceso.
+  other: Lo sentimos, pero Google está respondiendo con un error indeterminado al procesar la petición.

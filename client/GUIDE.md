@@ -475,3 +475,90 @@ and then, on `package.json`:
 ```
 
 To build this new target, just run `npm run buildpro`.
+
+
+# Social Sign-In
+
+**IMPORTANT**: YOU NEED TO DO `npm install` ON CLIENT MODULE BEFORE STARTING IT.
+
+This will cover the sign-in with social: `google`, `facebook` and `linkedin`.
+
+At moment redacting this document, only `google` and `linkedin` is included and working.
+
+## Abstract
+
+The client will include all `javascript` to allow social sign-in. Once the user click on the corresponding sign-in button, 
+the client will call the server with the social `id_token` response to verify that the client request is ok.
+
+Once the server receives the verification response, it will check if user is registered on server, returning if the user 
+is sign-in or not: similar to `username/password` sign-in but getting data from social server.
+
+To handle the logic on the client, I have included the logic to social sign-in on `DefaultLayout` component.
+There are also utilities on `socialLoader` and `socialInitializer` mixins. Both mixins must be modified
+to include `facebook` and `linkedin` sign-in.
+
+The `SignIn` component is responsible of loading `javascript` using utilities on `@/utils/social` directory, registering
+the callbacks for sign-in logic: you need to modify both mixins.
+
+Each social sign-in must be included in separated files, keeping logic in its own scope: prefix all methods with the 
+corresponding social name, for example, for google, all methods will be prefixed with `google`.
+
+I have configured `SignIn` component to be aware of `javascript` load, once the logic included, the component
+will not be necessary to change it.
+
+## Configuration
+
+We need to include on client module social data for client id and secret key for each social sign-in. 
+I have included it on `.env` file of  client module.
+
+Beware when changing on server module: keep both `.env` files in sync.
+
+On client module, we need to prefix each entry with `VUE_APP_`.
+
+The secret is only required when using client module server, just to check token response from client.
+
+
+## Things to add / modify to include a new one social sig-in
+
+To include another social sing-in module:
+
+1) Include `javascript` logic on `@/utils/social` directory.
+2) Add sign-in callbacks to `@/components/DefaultLayout.vue`: these callbacks will be called once sign-in logic called.
+3) Modify `@/components/DefaultLayout.vue` to provide sign-in callbacks from the previous step: just modifiy `provide()` 
+function adding all them to the object.
+4) Modify `@/mixins/socialLoader.js` mixin to inject sign-in callbacks from step 2: just modify `inject`
+property including all them. **DO NOT ADD TO @/mixins/socialInitializer.js mixin**, it is used by `DefaultLayout.vue` that is
+the provider of the callbacks.
+5) Include logic call included in step 1 on `@/mixins/socialInitializer.js` **mounted** method: beware of the order, just add
+to the end and uncomment it from the array const.
+6) Add corresponding `watch` entry on `@/mixins/socialLoader.js`: this will install the listener (if necessary).
+7) Add logic to sign-in callbacks on `@/components/DefaultLayout.vue`: see `googleSignInSuccess` and `googleSignInFailure`.
+8) Add dev dependency to verify on server side: like `npm i --save-dev google-auth-library`.
+9) Add mapping to `dev-server-api/index.js` file: see 
+    ```javascript
+    app.post(`${apiPath}sign-in-google`, handleSignInGoogle);
+    ```
+10) Add logic to call social server: see `handleSignInGoogle` on `dev-server-api/index.js`.
+
+## Google
+
+We need to install `google-auth-library` as a dev dependency on client module: `npm i --save-dev google-auth-library`.
+
+Once installed, just start client module: `npm run serve-dev-ui` 
+
+## LinkedIn
+
+We need to install `node-fetch` as a dev dependency on client module: `npm i --save-dev node-fetch`.
+
+We need to add `http:localhost:8080/auth/linkedin/callback` to allow default port to `LinkedIn` admin console.
+If not added, then we need to start client module on port 3000.
+When added, just remove `PORT=3000` on `.env` client module file. 
+
+Once installed and configured, just start client module: `npm run serve-dev-ui` .
+
+## Server module
+
+We are required to include logic similar to described on abstract entry, so we will need to
+add a `POST` method for each social sign-in. Once all social sign-in done, I'll review
+if we can simplify things.
+

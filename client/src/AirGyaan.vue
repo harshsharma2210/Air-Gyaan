@@ -10,10 +10,13 @@
 //todo@userquin: mock login until clarified
 const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
 
-import { useDarkMode } from "@/utils/useDarkMode";
 import apiFetch from "@/mixins/apiFetch";
 import camelCase from "lodash/camelCase";
+import debounce from "lodash/debounce";
 import upperFirst from "lodash/upperFirst";
+
+import { useDarkMode } from "@/utils/useDarkMode";
+import { initializeLanguage } from "@/i18n";
 
 export default {
   name: 'AirGyaan',
@@ -35,25 +38,34 @@ export default {
   },
   async beforeMount() {
     await this.$nextTick();
-    // eslint-disable-next-line no-unused-vars
     this.darkDetector = useDarkMode(
         this.$vuetify,
         dark => (this.nativeDarkMode = dark)
     )
     this.$router.afterEach(this.changeSeo);
-    await this.checkContext();
+    await Promise.allSettled([
+      this.loadLanguage(),
+      this.checkContext()
+    ])
   },
   async beforeDestroy() {
     this.darkDetector && this.darkDetector.destroy();
     this.darkDetector = null;
   },
   methods: {
-    async changeSeo(to) {
+    changeSeo: debounce(async function(to) {
       if (to) {
         const { meta } = to;
         let title = meta && meta.title;
         if (!title || title.length === 0) {
-          title = `Views.${upperFirst(camelCase(to.name))}.title`;
+          let name = to.name;
+          if (!name || name.length === 0) {
+            name = to.toString();
+            if (name.startsWith("/")) {
+              name = name.substring(1);
+            }
+          }
+          title = `Views.${upperFirst(camelCase(name))}.title`;
         }
         document.title = [
           this.$t(title),
@@ -70,10 +82,17 @@ export default {
           document.querySelector('meta[name="description"]').setAttribute("content", description);
         }
       }
-    },
+    }, 128),
     async checkContext() {
       if (mockUiLogin === false) {
         await apiFetch.methods.checkContext.call(this);
+      }
+    },
+    async loadLanguage() {
+      try {
+        await initializeLanguage();
+      } catch(_) {
+        // just ignore
       }
     }
   }
