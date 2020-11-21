@@ -44,7 +44,7 @@ export default {
     )
     this.$router.afterEach(this.changeSeo);
     await Promise.allSettled([
-      initializeLanguage(),
+      this.loadLanguage(),
       this.checkContext()
     ])
   },
@@ -86,6 +86,13 @@ export default {
     async checkContext() {
       if (mockUiLogin === false) {
         await apiFetch.methods.checkContext.call(this);
+      }
+    },
+    async loadLanguage() {
+      try {
+        await initializeLanguage();
+      } catch(_) {
+        // just ignore
       }
     }
   }
