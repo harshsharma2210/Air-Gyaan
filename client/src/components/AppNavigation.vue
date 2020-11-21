@@ -144,10 +144,11 @@ export default {
   .v-btn.add-post {
     border-radius: 0;
     transition: height 0.5s, width 0.5s, border-radius 0.2s, box-shadow 0.2s, background 0.2s, transform 330ms ease-in-out;
+    transform: translate(0, 0) !important;
     &.fab {
       border-radius: 50% !important;
       min-width: initial !important;
-      transform: translate(0, -28px);
+      transform: translate(0, -28px) !important;
     }
   }
   .v-btn.v-size--x-small {
