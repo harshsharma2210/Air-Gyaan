@@ -36,10 +36,8 @@ ul.errors {
   padding: 0 !important;
   margin: 0 !important;
   li {
-    //padding: 0 0 8px 16px;
     display: grid;
-    grid-template-columns: min-content auto auto;
-    //grid-template-columns: min-content auto min-content;
+    grid-template-columns: min-content auto;
     grid-column-gap: 8px;
     align-items: center;
   }
