@@ -6,3 +6,8 @@ form:
   subtitle: Subtitle
   body: Content
 post: Post
+posts:
+  no-results: No posts found
+  no-more: No more posts found
+  retry: Retry
+  error: Opps, something went wrong :(
