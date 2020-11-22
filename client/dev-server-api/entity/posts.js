@@ -7,6 +7,11 @@ const {
   doDelete
 } = require("../entity-helper");
 
+const {
+  addPostAction,
+  verifyGrecaptcha
+} = require("../grecaptcha");
+
 const handler = {
   handleGetAll: function(req, res) {
     doGetAll(res);
@@ -17,20 +22,36 @@ const handler = {
   handleDelete: function(req, res) {
     doDelete(req, res);
   },
-  handleCreate: function(req, res) {
+  handleCreate: async function(req, res) {
     const {
       title,
       subtitle = null,
-      body
+      body,
+      action,
+      grecaptcha
     } = req.body;
-    addNewEntity(
-      {
-        title,
-        subtitle,
-        body
-      },
-      res
-    );
+    if (action === addPostAction && !!grecaptcha) {
+      const verifyError = await verifyGrecaptcha(addPostAction, grecaptcha);
+      if (verifyError.valid) {
+        addNewEntity(
+          {
+            title,
+            subtitle,
+            body
+          },
+          res
+        );
+      } else {
+        res.json({
+          "errorKey": "recaptcha-error",
+          "error": verifyError.error.message || "unknown"
+        });
+      }
+    } else {
+      res.json({
+        "errorKey": "missing-recaptcha"
+      });
+    }
   },
   handleUpdate: function(req, res) {
     updateEntity(req, res, r => {

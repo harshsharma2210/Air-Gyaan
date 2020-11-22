@@ -43,5 +43,8 @@ ul.errors {
   }
 }
 
+.grecaptcha-badge {
+  visibility: hidden;
+}
 
 @import '~vuetify/src/styles/main.sass';

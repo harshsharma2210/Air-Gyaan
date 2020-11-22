@@ -71,6 +71,11 @@ const webpackConfiguration = {
           minRatio: 0.8
         })
       );
+    } else {
+      // enable CORS
+      config.devServer = {
+        headers: { 'Access-Control-Allow-Origin': '*' }
+      }
     }
   },
   chainWebpack: config => {

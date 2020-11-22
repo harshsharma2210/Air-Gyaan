@@ -18,16 +18,13 @@ export default {
       }
 
     },
-    async requestSignIn(username, password) {
+    async requestSignIn(body) {
       const request = await fetchRequestBuilder("sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: {
-          username,
-          password
-        }
+        body
       });
       const response = await fetch(request);
       return await response.json();

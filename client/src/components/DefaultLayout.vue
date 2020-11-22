@@ -139,15 +139,17 @@
       <v-main>
         <router-view :key="$route.fullPath"/>
       </v-main>
-      <app-navigation @show-add-post="showAddPost = true" :initialized="initialized" />
+      <app-navigation @show-add-post="prepareShowAddPost" :initialized="initialized" />
       <v-dialog
           v-model="showAddPost"
           max-width="500px"
+          scrollable
           persistent
       >
         <app-post
             v-if="showAddPost"
             dialog
+            :enable-addPost="enableAddPost"
             @cancel-post="showAddPost = false"
             @add-post="addPost"
         />
@@ -175,6 +177,13 @@ const mockUiLogin = process.env.VUE_APP_MOCK_UI_LOGIN === "true";
 import apiFetch from "@/mixins/apiFetch";
 
 import socialInitializer from "@/mixins/socialInitializer";
+import {
+  loadGrecaptcha,
+  executeAddPostAction,
+  addPostAction,
+  executeSignInAction,
+  signInAction
+} from "@/utils/social/grecaptcha";
 import { languages, changeLanguage } from "@/i18n"
 import { mapActions, mapState } from "vuex";
 
@@ -188,6 +197,9 @@ export default {
   components: { AirGyaanIcon, Errors, AppNavigation, AppPost },
   data: () => ({
     available: languages,
+    loadingGrecaptcha: false,
+    grecaptchaLoaded: false,
+    grecaptchaError: false,
     showAddPost: false,
     showErrorDialog: false,
     errorTitle: null,
@@ -244,6 +256,9 @@ export default {
     },
     disableSignUp() {
       return this.$route && this.$route.name === "sign-up";
+    },
+    enableAddPost() {
+      return !this.loadingGrecaptcha && this.grecaptchaLoaded && !this.grecaptchaError;
     }
   },
 /*
@@ -295,7 +310,14 @@ export default {
             name: "Joaquín"
           };
         } else {
-          data = await this.requestSignIn(username, password);
+          const grecaptcha = await executeSignInAction();
+          const body = {
+            username,
+            password,
+            grecaptcha,
+            action: signInAction
+          };
+          data = await this.requestSignIn(body);
         }
         await this.processLogin(data);
         await this.configureBusy(false);
@@ -316,8 +338,44 @@ export default {
     async signUp(/*{ username, password }*/) {
 
     },
-    async addPost(body) {
+    async prepareShowAddPost() {
+      await this.prepareRecaptcha();
+      this.showAddPost = true;
+    },
+    async prepareRecaptcha() {
+      if (!this.grecaptchaLoaded) {
+        await this.configureBusy(true);
+        this.loadingGrecaptcha = true;
+        loadGrecaptcha()
+            .then(this.grecaptchaInitialized)
+            .catch(this.grecapchaNotInitilized)
+            .finally(async () => {
+              await this.configureBusy(false)
+            });
+      }
+    },
+    async grecaptchaInitialized() {
+      this.loadingGrecaptcha = false;
+      this.grecaptchaLoaded = true;
+      this.grecaptchaError = false;
+    },
+    async grecapchaNotInitilized(error) {
+      console.error("cannot initialize grecaptcha", error);
+      this.loadingGrecaptcha = false;
+      this.grecaptchaLoaded = true;
+      this.grecaptchaError = true;
+      this.loadingGrecaptcha = false;
+    },
+    async addPost(data) {
       try {
+        const grecaptcha = await executeAddPostAction();
+        console.info(`Grecaptcha was: ${grecaptcha}`);
+        console.info(`Body was: ${data}`);
+        const body = Object.assign({}, data, {
+          action: addPostAction,
+          grecaptcha: grecaptcha
+        })
+        //todo@userquin: check if home page and then reload?? or just push content to posts
         await this.apiPost("posts/add", { body });
         await this.configureBusy(false);
         await this.$nextTick();
@@ -336,7 +394,7 @@ export default {
         await this.configureBusy(false);
         await this.$nextTick();
       } catch (e) {
-        //todo: handle error
+        //todo@userquin: handle error
         await this.configureBusy(false);
       }
     },

@@ -11,6 +11,12 @@ const linkedInClientId = process.env.VUE_APP_LINKEDIN_APP_ID;
 const linkedInSecretKey = process.env.VUE_APP_LINKEDIN_APP_SECRET;
 const linkedInCallbackUrl = process.env.VUE_APP_LINKEDIN_CALLBACK_URL;
 
+const {
+  signInAction,
+  verifyGrecaptcha
+} = require("./grecaptcha");
+
+
 const configureUsers = require("./users");
 const configureEntityHandlers = require("./entity");
 
@@ -107,23 +113,42 @@ const handleCheckContext = (req, res) => {
   }
 };
 
-const handleSignIn = (req, res) => {
-  const { username, password } = req.body;
-  let signedIn = false;
-  if (username && password && users.has(username)) {
-    const userData = users.get(username);
-    if (userData.userPassword === password) {
-      const id = `id-${ids++}`;
-      signedIn = true;
-      cookies.set(id, {
-        id,
-        username
-      });
-      sendUserInfo(res, id, userData);
+const handleSignIn = async (req, res) => {
+  const {
+    username,
+    password,
+    action,
+    grecaptcha
+  } = req.body;
+  if (action === signInAction && !!grecaptcha) {
+    const verifyError = await verifyGrecaptcha(signInAction, grecaptcha);
+    if (verifyError.valid) {
+      let signedIn = false;
+      if (username && password && users.has(username)) {
+        const userData = users.get(username);
+        if (userData.userPassword === password) {
+          const id = `id-${ids++}`;
+          signedIn = true;
+          cookies.set(id, {
+            id,
+            username
+          });
+          sendUserInfo(res, id, userData);
+        }
+      }
+      if (!signedIn) {
+        res.json(requiresSignInResponse());
+      }
+    } else {
+      const response = requiresSignInResponse();
+      response.errorKey = "recaptcha-error";
+      response.error = verifyError.error.message || "unknown";
+      res.json(response);
     }
-  }
-  if (!signedIn) {
-    res.json(requiresSignInResponse());
+  } else {
+    const response = requiresSignInResponse();
+    response.errorKey = "recaptcha-error";
+    res.json(response);
   }
 };
 
@@ -257,7 +282,6 @@ const handleAvatar = (req, res) => {
 const devServerApi = (app, server) => {
   const apiPath = `${publicPath}api/`;
   configureUsers(users, apiPath);
-  // const fs = require("fs");
   const bodyParser = require("body-parser");
   // all form will submit json
   app.use(bodyParser.json());
