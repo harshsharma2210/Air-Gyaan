@@ -1,7 +1,8 @@
 <template>
   <v-card>
     <v-card-title>{{ title }}</v-card-title>
-    <v-card-text>
+    <v-divider></v-divider>
+    <v-card-text style="height: 300px">
       <v-form ref="form" v-model="valid" lazy-validation class="post-form pt-4" @submit.prevent="">
         <v-text-field
             ref="title"
@@ -32,6 +33,7 @@
         ></v-textarea>
       </v-form>
     </v-card-text>
+    <v-divider></v-divider>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn
@@ -48,7 +50,7 @@
           outlined
           class="ma-2 px-4"
           :loading="busy"
-          :disabled="busy || !valid"
+          :disabled="!enableAddPost && (busy || !valid)"
           @click.native.prevent="fireSubmit"
       >
         {{ $t("Components.Post.post") }}
@@ -62,7 +64,11 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "app-post",
   props: {
-    dialog: Boolean
+    dialog: Boolean,
+    enableAddPost: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
     valid: true,

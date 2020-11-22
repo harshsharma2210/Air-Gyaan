@@ -36,7 +36,8 @@
             ref="access"
             outlined
             class="ma-2 px-4"
-            :loading="busy"
+            :loading="busy || loading"
+            :disabled="!enableSignIn"
             @click.native.prevent="fireSubmit"
         >
           {{ $t("Components.User.signin.signin") }}
@@ -84,6 +85,7 @@
 <script>
 import { mapState } from "vuex";
 import socialLoader from "@/mixins/socialLoader";
+import { loadGrecaptcha } from "@/utils/social/grecaptcha";
 
 export default {
   name: "sign-in",
@@ -95,6 +97,8 @@ export default {
   },
   data: () => ({
     valid: true,
+    loading: true,
+    enableSignIn: false,
     activateValidation: false,
     form: {
       username: null,
@@ -150,6 +154,14 @@ export default {
       },
       immediate: true
     }
+  },
+  beforeMount() {
+    this.loading = true;
+    this.enableSignIn = false;
+    loadGrecaptcha()
+        .then(() => (this.enableSignIn = true))
+        .catch(() => (this.enableSignIn = false))
+        .finally(() => (this.loading = false));
   },
   mounted() {
     this.focusElement(true);
