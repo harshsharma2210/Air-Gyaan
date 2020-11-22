@@ -369,8 +369,6 @@ export default {
     async addPost(data) {
       try {
         const grecaptcha = await executeAddPostAction();
-        console.info(`Grecaptcha was: ${grecaptcha}`);
-        console.info(`Body was: ${data}`);
         const body = Object.assign({}, data, {
           action: addPostAction,
           grecaptcha: grecaptcha
@@ -382,6 +380,7 @@ export default {
         this.showAddPost = false;
       } catch (e) {
         //todo: handle error
+        console.error("cannot add post", e);
         await this.configureBusy(false);
       }
     },

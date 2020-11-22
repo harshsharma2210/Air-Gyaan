@@ -124,7 +124,7 @@ const handleSignIn = async (req, res) => {
     grecaptcha
   } = req.body;
   if (action === signInAction && !!grecaptcha) {
-    const verifyError = await verifyGrecaptcha(secret, score, signInAction, grecaptcha);
+    const verifyError = await verifyGrecaptcha(fetch, secret, score, signInAction, grecaptcha);
     if (verifyError.valid) {
       let signedIn = false;
       if (username && password && users.has(username)) {

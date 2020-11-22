@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation app v-model="value">
+  <v-bottom-navigation app v-model="value" @change="navigateTo">
     <v-btn value="home" :x-small="smallButtons">
       <span>{{ $t("App.home") }}</span>
       <v-icon>$vuetify.icons.home</v-icon>
@@ -14,6 +14,7 @@
       <v-btn
           v-show="loggedIn"
           color="accent"
+          value="add-post"
           :elevation="addFloating ? 6 : 0"
           :class="['add-post', { fab: addFloating }]"
           :title="addFloating ? $t('App.newPost') : null"
@@ -54,7 +55,7 @@ export default {
   },
   data: () => ({
     addFloating: false,
-    value: undefined
+    value: "home"
   }),
   computed: {
     ...mapState(["loggedIn"]),
@@ -62,18 +63,7 @@ export default {
       return this.$vuetify.breakpoint.xs;
     }
   },
-  watch: {
-    value: {
-      async handler(newVal, oldVal) {
-        if (this.initialized && newVal && oldVal !== undefined) {
-          await this.navigateTo(newVal);
-        }
-      },
-      immediate: true
-    }
-  },
   async beforeMount() {
-    this.value = this.$route.name;
     this.addFloating = window.scrollY === 0;
     if (detectPassiveEvents.hasSupport) {
       window.addEventListener("scroll", this.onScroll,{ passive: true, capture: false });
@@ -86,8 +76,10 @@ export default {
   },
   methods: {
     async navigateTo(name) {
-      await this.$nextTick();
-      await this.$router.push({ name });
+      if (name && name !== "add-post") {
+        await this.$nextTick();
+        await this.$router.push({ name });
+      }
     },
     async onScroll(e) {
       this.addFloating = e.target.scrollingElement.scrollTop === 0;

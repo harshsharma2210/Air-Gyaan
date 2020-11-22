@@ -7,8 +7,8 @@ Vue.use(Router);
 const requireRoutes = require.context("./", false, /\.js$/);
 
 const routes = [{
-    path: "",
     name: "home",
+    path: "/",
     component: HomeView
 }];
 

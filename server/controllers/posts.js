@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 const { addPostAction, verifyGrecaptcha } = require("../../common/grecaptcha");
 
 const secret = process.env.GRECAPTCHA_SECRET_KEY;
@@ -10,7 +12,7 @@ let Post = require('../models/posts');
 const addPosts = async (req, res) => {
     const { grecaptcha, action } = req.body;
     if (action === addPostAction && !!grecaptcha) {
-        const verifyError = await verifyGrecaptcha(secret, score, addPostAction, grecaptcha);
+        const verifyError = await verifyGrecaptcha(fetch, secret, score, addPostAction, grecaptcha);
         if (verifyError.valid) {
             let post = new Post(req.body);
             try {

@@ -58,7 +58,7 @@ const loadGrecaptcha = async () => {
 };
 
 const executeGrecaptchaAction = async action => {
-  return await window.grecaptcha.execute(grecaptchaValue, { action });
+  return window.grecaptcha.execute(grecaptchaValue, { action });
 }
 
 const executeSignInAction = async () => {

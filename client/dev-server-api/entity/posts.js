@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 const secret = process.env.VUE_APP_GRECAPTCHA_SECRET_KEY;
 const score = parseInt(process.env.VUE_APP_GRECAPTCHA_SCORE || 85) / 100;
 
@@ -34,7 +36,7 @@ const handler = {
       grecaptcha
     } = req.body;
     if (action === addPostAction && !!grecaptcha) {
-      const verifyError = await verifyGrecaptcha(secret, score, addPostAction, grecaptcha);
+      const verifyError = await verifyGrecaptcha(fetch, secret, score, addPostAction, grecaptcha);
       if (verifyError.valid) {
         addNewEntity(
           {

@@ -1,9 +1,7 @@
-const fetch = require("node-fetch");
-
 const signInAction = "signin";
 const addPostAction = "addpost";
 
-const verifyGrecaptcha = async (secret, score, action, grecaptcha) => {
+const verifyGrecaptcha = async (fetch, secret, score, action, grecaptcha) => {
   const body = new URLSearchParams();
   body.append("secret", secret);
   body.append("response", grecaptcha);
