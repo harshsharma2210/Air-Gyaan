@@ -11,10 +11,13 @@ const linkedInClientId = process.env.VUE_APP_LINKEDIN_APP_ID;
 const linkedInSecretKey = process.env.VUE_APP_LINKEDIN_APP_SECRET;
 const linkedInCallbackUrl = process.env.VUE_APP_LINKEDIN_CALLBACK_URL;
 
+const secret = process.env.VUE_APP_GRECAPTCHA_SECRET_KEY;
+const score = parseInt(process.env.VUE_APP_GRECAPTCHA_SCORE || 85) / 100;
+
 const {
   signInAction,
   verifyGrecaptcha
-} = require("./grecaptcha");
+} = require("../../common/grecaptcha");
 
 
 const configureUsers = require("./users");
@@ -121,7 +124,7 @@ const handleSignIn = async (req, res) => {
     grecaptcha
   } = req.body;
   if (action === signInAction && !!grecaptcha) {
-    const verifyError = await verifyGrecaptcha(signInAction, grecaptcha);
+    const verifyError = await verifyGrecaptcha(secret, score, signInAction, grecaptcha);
     if (verifyError.valid) {
       let signedIn = false;
       if (username && password && users.has(username)) {

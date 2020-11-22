@@ -1,12 +1,9 @@
 const fetch = require("node-fetch");
 
-const secret = process.env.VUE_APP_GRECAPTCHA_SECRET_KEY;
-const score = parseInt(process.env.VUE_APP_GRECAPTCHA_SCORE || 85) / 100;
-
 const signInAction = "signin";
 const addPostAction = "addpost";
 
-const verifyGrecaptcha = async (action, grecaptcha) => {
+const verifyGrecaptcha = async (secret, score, action, grecaptcha) => {
   const body = new URLSearchParams();
   body.append("secret", secret);
   body.append("response", grecaptcha);
