@@ -16,7 +16,10 @@ const addPosts = function (req, res) {
 
 // Defined get data(index or listing) route
 const getAllPosts = function (req, res) {
-    Post.find(function (err, posts) {
+    Post.paginate({}, {
+        page: req.query.page || 1,
+        limit: req.query.limit || 10
+    }, function (err, posts) {
         if (err) {
             res.json(err);
         }
