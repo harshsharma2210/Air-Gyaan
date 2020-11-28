@@ -10,7 +10,7 @@ const addPosts = function (req, res) {
             res.status(200).json({ 'business': 'business in added successfully' });
         })
         .catch(() => {
-            res.status(400).send("unable to save to database");
+            res.status(500).send("unable to save to database");
         });
 }
 
@@ -21,7 +21,7 @@ const getAllPosts = function (req, res) {
         limit: req.query.limit || 10
     }, function (err, posts) {
         if (err) {
-            res.json(err);
+            res.status(500).json(err);
         }
         else {
             res.json(posts);
@@ -34,7 +34,7 @@ const getPostsById = function (req, res) {
     let id = req.params.id;
     Post.findById(id, function (err, post) {
         if (err) {
-            res.json(err);
+            res.status(500).json(err);
         }
         res.json(post);
     });
@@ -61,7 +61,7 @@ const updatePostsById = function (req, res) {
 // Defined delete | remove | destroy route
 const deletePostsById = function (req, res) {
     Post.findByIdAndRemove({ _id: req.params.id }, function (err) {
-        if (err) res.json(err);
+        if (err) res.status(500).json(err);
         else res.json('Successfully removed');
     });
 }
