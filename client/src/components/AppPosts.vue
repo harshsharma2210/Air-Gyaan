@@ -1,7 +1,7 @@
 <template>
   <div :class="['posts-container', { mobile: $vuetify.breakpoint.mobile }]">
     <app-post-entry v-for="(post, idx) in posts" :key="`${idx}-${post._id}`" :post="post" />
-    <infinite-loading @infinite="loadPosts" :distance="postsSize">
+    <infinite-loading ref="posts" @infinite="loadPosts" :distance="postsSize">
       <template #noResults>
         <div class="text-centered">{{ $t("Components.Post.posts.no-results") }}</div>
       </template>
@@ -37,14 +37,44 @@ export default {
       default: 10
     }
   },
+  inject: {
+    addPostCreationListener: {
+      default: null
+    }
+  },
   data: () => ({
-    posts: []
+    posts: [],
+    page: 0,
+    limit: 10,
+    addPostCreationProxy: null
   }),
+  async beforeMount() {
+    this.addPostCreationProxy = this.addPostCreationListener && this.addPostCreationListener(
+        this.refreshPosts
+    );
+  },
+  async beforeDestroy() {
+    this.addPostCreationProxy && this.addPostCreationProxy.destroy();
+    this.addPostCreationProxy = null;
+  },
   methods: {
+    async refreshPosts() {
+      this.page = 0;
+      this.posts.splice(0, this.posts.length);
+      await this.$refs.posts.stateChanger.reset();
+    },
     async loadPosts(state) {
       try {
-        const posts = await this.apiGet(this.url);
+        const { docs: posts, page, limit } = await this.apiGet(this.url, {
+          query: {
+            page: this.page + 1,
+            limit: this.limit
+          }
+        });
+        this.limit = limit;
         if (posts.length > 0) {
+          // update page only if more results found
+          this.page = page;
           this.posts.push(...posts);
           state.loaded();
         } else {

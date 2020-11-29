@@ -20,10 +20,10 @@ const configureEntityHandlers = (app, apiUriPath) => {
       populateSomeData
     } = entity.default || entity;
     app.get(`${apiUriPath}${name}`, handleGetAll);
-    app.get(`${apiUriPath}${name}/edit/:id`, handleGet);
-    app.post(`${apiUriPath}${name}/add`, handleCreate);
-    app.put(`${apiUriPath}${name}/update/:id`, handleUpdate);
-    app.delete(`${apiUriPath}${name}/delete/:id`, handleDelete);
+    app.get(`${apiUriPath}${name}/:id`, handleGet);
+    app.post(`${apiUriPath}${name}`, handleCreate);
+    app.put(`${apiUriPath}${name}/:id`, handleUpdate);
+    app.delete(`${apiUriPath}${name}/:id`, handleDelete);
     if (populateSomeData) {
       populateSomeData();
     }

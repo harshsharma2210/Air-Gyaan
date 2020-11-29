@@ -205,14 +205,16 @@ export default {
     errorTitle: null,
     errorMessages: [],
     showSignUp: false,
-    initialized: false
+    initialized: false,
+    addPostListeners: []
   }),
   provide() {
     return {
       signIn: this.signIn,
       googleSignInSuccess: this.googleSignInSuccess,
       googleSignInFailure: this.googleSignInFailure,
-      signUp: this.signUp
+      signUp: this.signUp,
+      addPostCreationListener: this.addPostCreationListener
     }
   },
   async beforeMount() {
@@ -231,6 +233,8 @@ export default {
     );
   },
   beforeDestroy() {
+    this.addPostListeners.forEach(p => p.destroy());
+    this.addPostListeners.splice(0, this.addPostListeners.length);
     this.watcher && this.watcher();
     this.watcher = null;
   },
@@ -273,6 +277,23 @@ export default {
 */
   methods: {
     ...mapActions(["configureBusy"]),
+    async addPostCreationListener(listener) {
+      const vm = this;
+      const proxy = {
+        listener,
+        destroy: function destroy() {
+          const index = vm.addPostListeners.indexOf(listener);
+          if (index > -1) {
+            vm.addPostListeners.splice(index, 1);
+          }
+        }
+      }
+      this.addPostListeners.push(proxy);
+      return proxy;
+    },
+    async notifyPostAdded() {
+      this.addPostListeners.forEach(p => p && typeof p.listener === "function" && p.listener());
+    },
     async handleLoggedIn() {
       if (this.$route) {
         if (this.loggedIn === false || this.loggedIn === null) {
@@ -374,10 +395,11 @@ export default {
           grecaptcha: grecaptcha
         })
         //todo@userquin: check if home page and then reload?? or just push content to posts
-        await this.apiPost("posts/add", { body });
+        await this.apiPost("posts", { body });
         await this.configureBusy(false);
         await this.$nextTick();
         this.showAddPost = false;
+        await this.notifyPostAdded();
       } catch (e) {
         //todo: handle error
         console.error("cannot add post", e);

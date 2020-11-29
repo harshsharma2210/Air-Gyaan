@@ -9,6 +9,8 @@ const addNewEntity = (entity, res) => {
     __lu: new Date().toISOString(),
     __v: 0
   }));
+  //todo@userquin: unify this with same server logic or modify server logic
+  // res.status(200).json({ 'business': 'business in added successfully' });
   res.json({ created: true });
 }
 
@@ -26,13 +28,66 @@ const updateEntity = (req, res, callback) => {
   res.json({ updated });
 }
 
-const doGetAll = res => {
-  res.json(entities.sort((a, b) => b._id - a._id));
+const doGetAll = (req, res) => {
+  let page = 1;
+  try {
+    page = parseInt(req.query && req.query.page, 10);
+    if (isNaN(page) || page < 1) {
+      page = 1;
+    }
+  } catch (_) {
+    page = 1;
+  }
+  let limit = req.query && req.query.limit;
+  if (limit !== undefined) {
+    try {
+      limit = parseInt(limit, 10);
+      if (isNaN(limit) || limit <= 0) {
+        limit = 10;
+      }
+    } catch (_) {
+      limit = 10;
+    }
+  } else {
+    limit = 10;
+  }
+  // make a sorted copy
+  const resultingRows = entities.sort((a, b) => b._id - a._id);
+  const total = resultingRows.length;
+  // https://www.npmjs.com/package/mongoose-paginate-v2#modelpaginatequery-options-callback
+  // we dont include pagingCounter entry
+  const result = {
+    docs: [],
+    totalDocs: total,
+    totalPages: Math.ceil(total / limit),
+    hasNextPage: false,
+    hasPrevPage: page > 1,
+    nextPage: null,
+    prevPage: page > 1 ? page - 1: null,
+    limit,
+    page
+  }
+  // UI 1 based => we need to handle it 0 based
+  const startIndex = (page - 1) * limit;
+  if (startIndex < total) {
+    const endIndex = Math.max(total - 1, page * limit);
+    result.docs = resultingRows.slice(startIndex, endIndex);
+    result.hasNextPage = result.totalPages > page;
+    if (result.hasNextPage) {
+      result.nextPage = page + 1;
+    }
+  }
+  res.json(result);
 };
 
 const doGet = (req, res) => {
   const id = req.params.id;
-  res.json(entities.find(p => p._id === id));
+  const entity = entities.find(p => p._id === id);
+  if (entity) {
+    res.json(entity);
+  } else {
+    res.status(404).send(`cannot find requested post: ${id}`);
+  }
 };
 
 const doDelete = (req, res) => {

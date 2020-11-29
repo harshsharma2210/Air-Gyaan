@@ -19,7 +19,7 @@ const {
 
 const handler = {
   handleGetAll: function(req, res) {
-    doGetAll(res);
+    doGetAll(req, res);
   },
   handleGet: function(req, res) {
     doGet(req, res);
@@ -73,7 +73,7 @@ const handler = {
     })
   },
   populateSomeData: function() {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 10; i++) {
       populateData({
         _id: `${i + 1}`,
         title: `Post ${i + 1}`,
