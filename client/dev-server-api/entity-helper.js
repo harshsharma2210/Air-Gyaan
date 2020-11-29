@@ -32,7 +32,7 @@ const doGetAll = (req, res) => {
   let page = 1;
   try {
     page = parseInt(req.query && req.query.page, 10);
-    if (page < 0 || isNaN(page)) {
+    if (isNaN(page) || page < 1) {
       page = 1;
     }
   } catch (_) {
@@ -42,6 +42,9 @@ const doGetAll = (req, res) => {
   if (limit !== undefined) {
     try {
       limit = parseInt(limit, 10);
+      if (isNaN(limit) || limit <= 0) {
+        limit = 10;
+      }
     } catch (_) {
       limit = 10;
     }
@@ -50,18 +53,29 @@ const doGetAll = (req, res) => {
   }
   // make a sorted copy
   const resultingRows = entities.sort((a, b) => b._id - a._id);
-  // https://github.com/edwardhotchkiss/mongoose-paginate#modelpaginatequery-options-callback
+  const total = resultingRows.length;
+  // https://www.npmjs.com/package/mongoose-paginate-v2#modelpaginatequery-options-callback
+  // we dont include pagingCounter entry
   const result = {
     docs: [],
-    total: resultingRows.length,
+    totalDocs: resultingRows.length,
+    totalPages: Math.ceil(total / limit),
+    hasNextPage: false,
+    hasPrevPage: page > 1,
+    nextPage: null,
+    prevPage: page > 1 ? page - 1: null,
     limit,
     page
   }
   // UI 1 based => we need to handle it 0 based
   const startIndex = (page - 1) * limit;
-  if (startIndex < resultingRows.length) {
-    const endIndex = Math.max(resultingRows.length - 1, page * limit);
-    result.docs = resultingRows.slice(startIndex, endIndex)
+  if (startIndex < total) {
+    const endIndex = Math.max(total - 1, page * limit);
+    result.docs = resultingRows.slice(startIndex, endIndex);
+    result.hasNextPage = total - 1 > page * limit;
+    if (result.hasNextPage) {
+      result.nextPage = page + 1;
+    }
   }
   res.json(result);
 };
