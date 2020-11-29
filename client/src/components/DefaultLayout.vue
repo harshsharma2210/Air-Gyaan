@@ -374,7 +374,7 @@ export default {
           grecaptcha: grecaptcha
         })
         //todo@userquin: check if home page and then reload?? or just push content to posts
-        await this.apiPost("posts/add", { body });
+        await this.apiPost("posts", { body });
         await this.configureBusy(false);
         await this.$nextTick();
         this.showAddPost = false;

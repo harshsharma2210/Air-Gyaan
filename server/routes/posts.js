@@ -7,18 +7,18 @@ const postRoutes = express.Router();
 const { addPosts, getAllPosts, getPostsById, updatePostsById, deletePostsById } = require('../controllers/posts');
 
 // Defined store route
-postRoutes.route('/add').post(addPosts);
+postRoutes.route('/').post(addPosts);
 
 // Defined get data(index or listing) route
 postRoutes.route('/').get(getAllPosts);
 
 // Defined edit route
-postRoutes.route('/edit/:id').get(getPostsById);
+postRoutes.route('/:id').get(getPostsById);
 
 //  Defined update route
-postRoutes.route('/update/:id').post(updatePostsById);
+postRoutes.route('/:id').put(updatePostsById);
 
 // Defined delete | remove | destroy route
-postRoutes.route('/delete/:id').delete(deletePostsById);
+postRoutes.route('/:id').delete(deletePostsById);
 
 module.exports = postRoutes;

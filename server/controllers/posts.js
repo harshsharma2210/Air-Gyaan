@@ -19,7 +19,7 @@ const addPosts = async (req, res) => {
                 await post.save();
                 res.status(200).json({ 'business': 'business in added successfully' });
             } catch (e) {
-                res.status(400).send("unable to save to database");
+                res.status(500).send("unable to save to database");
             }
         } else {
             res.json({
@@ -43,14 +43,25 @@ const addPosts = async (req, res) => {
 
 // Defined get data(index or listing) route
 const getAllPosts = function (req, res) {
-    Post.find(function (err, posts) {
+    Post.paginate({}, {
+        page: req.query.page || 1,
+        limit: req.query.limit || 10
+    }, function (err, posts) {
         if (err) {
-            res.json(err);
+            res.status(500).json(err);
         }
         else {
             res.json(posts);
         }
     });
+    // Post.find(function (err, posts) {
+    //     if (err) {
+    //         res.status(500).json(err);
+    //     }
+    //     else {
+    //         res.json(posts);
+    //     }
+    // });
 }
 
 // Defined edit route
@@ -58,7 +69,7 @@ const getPostsById = function (req, res) {
     let id = req.params.id;
     Post.findById(id, function (err, post) {
         if (err) {
-            res.json(err);
+            res.status(500).json(err);
         }
         res.json(post);
     });
@@ -76,7 +87,7 @@ const updatePostsById = function (req, res) {
                 res.json('Update complete');
             })
                 .catch(() => {
-                    res.status(400).send("unable to update the database");
+                    res.status(500).send("unable to update the database");
                 });
         }
     });
@@ -85,7 +96,7 @@ const updatePostsById = function (req, res) {
 // Defined delete | remove | destroy route
 const deletePostsById = function (req, res) {
     Post.findByIdAndRemove({ _id: req.params.id }, function (err) {
-        if (err) res.json(err);
+        if (err) res.status(500).json(err);
         else res.json('Successfully removed');
     });
 }

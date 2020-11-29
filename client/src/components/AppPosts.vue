@@ -38,13 +38,22 @@ export default {
     }
   },
   data: () => ({
-    posts: []
+    posts: [],
+    page: 0,
+    limit: 10
   }),
   methods: {
     async loadPosts(state) {
       try {
-        const posts = await this.apiGet(this.url);
+        const { docs: posts, page, limit } = await this.apiGet(this.url, {
+          query: {
+            page: this.page + 1,
+            limit: this.limit
+          }
+        });
+        this.limit = limit;
         if (posts.length > 0) {
+          this.page = page;
           this.posts.push(...posts);
           state.loaded();
         } else {
