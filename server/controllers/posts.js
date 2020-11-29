@@ -43,9 +43,28 @@ const addPosts = async (req, res) => {
 
 // Defined get data(index or listing) route
 const getAllPosts = function (req, res) {
+    let page = 1;
+    try {
+        page = parseInt(req.query && req.query.page, 10);
+        if (page < 0 || isNaN(page)) {
+            page = 1;
+        }
+    } catch (_) {
+        page = 1;
+    }
+    let limit = req.query && req.query.limit;
+    if (limit !== undefined) {
+        try {
+            limit = parseInt(limit, 10);
+        } catch (_) {
+            limit = 10;
+        }
+    } else {
+        limit = 10;
+    }
     Post.paginate({}, {
-        page: req.query.page || 1,
-        limit: req.query.limit || 10
+        page,
+        limit
     }, function (err, posts) {
         if (err) {
             res.status(500).json(err);
