@@ -46,7 +46,7 @@ const getAllPosts = function (req, res) {
     let page = 1;
     try {
         page = parseInt(req.query && req.query.page, 10);
-        if (page < 0 || isNaN(page)) {
+        if (isNaN(page) || page < 1) {
             page = 1;
         }
     } catch (_) {
@@ -56,7 +56,7 @@ const getAllPosts = function (req, res) {
     if (limit !== undefined) {
         try {
             limit = parseInt(limit, 10);
-            if (limit <= 0 || isNaN(limit)) {
+            if (isNaN(limit) || limit <= 0) {
                 limit = 10;
             }
         } catch (_) {
