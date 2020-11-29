@@ -56,6 +56,9 @@ const getAllPosts = function (req, res) {
     if (limit !== undefined) {
         try {
             limit = parseInt(limit, 10);
+            if (limit <= 0 || isNaN(limit)) {
+                limit = 10;
+            }
         } catch (_) {
             limit = 10;
         }
