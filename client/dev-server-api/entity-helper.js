@@ -58,7 +58,7 @@ const doGetAll = (req, res) => {
   // we dont include pagingCounter entry
   const result = {
     docs: [],
-    totalDocs: resultingRows.length,
+    totalDocs: total,
     totalPages: Math.ceil(total / limit),
     hasNextPage: false,
     hasPrevPage: page > 1,
@@ -72,7 +72,7 @@ const doGetAll = (req, res) => {
   if (startIndex < total) {
     const endIndex = Math.max(total - 1, page * limit);
     result.docs = resultingRows.slice(startIndex, endIndex);
-    result.hasNextPage = total - 1 > page * limit;
+    result.hasNextPage = result.totalPages > page;
     if (result.hasNextPage) {
       result.nextPage = page + 1;
     }
